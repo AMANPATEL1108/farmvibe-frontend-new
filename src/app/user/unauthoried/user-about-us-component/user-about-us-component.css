@@ -1,0 +1,40 @@
+.hero-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #1a472a;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.content-img {
+  width: 100%;
+  max-width: 450px;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.section-heading {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.accent-green {
+  color: #1a472a;
+}
+
+.custom-btn {
+  background-color: #1a472a;
+  color: white;
+  padding: 0.6rem 1.4rem;
+  border: none;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.custom-btn:hover {
+  background-color: #145c2e;
+}

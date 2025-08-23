@@ -1,0 +1,10 @@
+/* header.component.css */
+nav a {
+  color: white; /* default text color */
+  text-decoration: none; /* remove underline */
+  transition: color 0.2s ease; /* smooth hover transition */
+}
+
+nav a:hover {
+  color: #60a5fa; /* Tailwind blue-300 */
+}
