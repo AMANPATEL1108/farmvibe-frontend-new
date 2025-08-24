@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-products',
@@ -9,47 +10,65 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './user-product-details-component.html',
 })
 export class UserProductDetailsComponent {
-  product = {
-    id: 1,
-    name: 'Organic Apple',
-    description: 'Fresh and juicy organic apples.',
-    price: 120,
-    weight: '1kg',
-    stock: 10,
-    imageUrl: 'assets/product1.jpg',
-    benefitList: ['Rich in vitamins', 'Boosts immunity', '100% organic'],
-  };
+  constructor(private router: Router) {}
 
-  showModal = false;
-  quantity = 1;
-  orderDate = new Date().toISOString().split('T')[0];
-  deliveryDate: string = '';
-
-  openModal() {
-    this.quantity = 1;
-    this.deliveryDate = '';
-    this.showModal = true;
+  private get modalEl(): HTMLElement | null {
+    return document.getElementById('quantityModal');
+  }
+  private get orderDateEl(): HTMLElement | null {
+    return document.getElementById('orderDate');
+  }
+  private get quantityInputEl(): HTMLInputElement | null {
+    return document.getElementById('quantityInput') as HTMLInputElement | null;
+  }
+  private get deliveryDateEl(): HTMLInputElement | null {
+    return document.getElementById('deliveryDate') as HTMLInputElement | null;
   }
 
-  closeModal() {
-    this.showModal = false;
+  openQuantityModel(): void {
+    console.log('Called Open Quantity MDoel');
+    this.openModal();
   }
 
-  changeQuantity(delta: number) {
-    let newQty = this.quantity + delta;
-    if (newQty >= 1 && newQty <= this.product.stock) {
-      this.quantity = newQty;
+  openModal(): void {
+    const today = new Date().toISOString().split('T')[0];
+
+    // Set order date text
+    if (this.orderDateEl) this.orderDateEl.textContent = today;
+
+    // Set min attribute for delivery date
+    if (this.deliveryDateEl) this.deliveryDateEl.setAttribute('min', today);
+
+    // Show modal
+    if (this.modalEl) {
+      this.modalEl.classList.remove('hidden');
+      this.modalEl.classList.add('flex');
     }
   }
 
-  continue() {
-    if (!this.deliveryDate) {
-      alert('Please select a delivery date.');
-      return;
+  closeModal(): void {
+    if (this.modalEl) {
+      this.modalEl.classList.add('hidden');
+      this.modalEl.classList.remove('flex');
     }
-    alert(
-      `Proceeding with ${this.quantity} qty of ${this.product.name}, delivery on ${this.deliveryDate}`
-    );
-    this.closeModal();
+  }
+
+  changeQuantity(delta: number): void {
+    const input = this.quantityInputEl;
+    if (!input) return;
+
+    const min = parseInt(input.min || '1', 10);
+    const max = parseInt(input.max || '10', 10);
+    let quantity = parseInt(input.value || '1', 10);
+
+    quantity += delta;
+    if (quantity >= min && quantity <= max) {
+      input.value = String(quantity);
+    }
+  }
+
+  proceed(): void {
+    // Navigate to the address details page
+    this.router.navigate(['/farmvibe/products/address']);
   }
 }

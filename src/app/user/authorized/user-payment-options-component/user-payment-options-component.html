@@ -1,0 +1,72 @@
+<div class="bg-green-50 min-h-screen flex items-center justify-center">
+  <div class="w-full max-w-xl px-6">
+
+    <!-- Title -->
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold text-green-800 mb-2 select-none">Safe Payment</h1>
+      <p class="text-gray-600 text-lg select-none">Choose your preferred payment method to continue.</p>
+    </div>
+
+    <!-- Toggle Buttons -->
+    <div class="flex gap-6 mb-10 justify-center">
+      <button (click)="showDetails('online')"
+        [ngClass]="{'bg-green-700': selectedMethod === 'online', 'bg-green-600': selectedMethod !== 'online'}"
+        class="w-40 h-12 text-white font-semibold rounded-md shadow-md hover:bg-green-700">
+        Online Payment
+      </button>
+
+      <button (click)="showDetails('offline')"
+        [ngClass]="{'bg-yellow-600': selectedMethod === 'offline', 'bg-yellow-500': selectedMethod !== 'offline'}"
+        class="w-40 h-12 text-white font-semibold rounded-md shadow-md hover:bg-yellow-600">
+        Cash on Delivery
+      </button>
+    </div>
+
+    <!-- Online Payment -->
+    <div *ngIf="selectedMethod === 'online'" class="bg-white rounded-lg shadow-lg p-8 mb-6">
+      <h2 class="text-2xl font-semibold mb-6 text-green-700 select-none">Online Payment Details</h2>
+      <ul class="mb-6 text-gray-700 space-y-3 select-none">
+        <li><strong>Product:</strong> {{ product.name }}</li>
+        <li><strong>Quantity:</strong> {{ qty }}</li>
+        <li><strong>Price per kg:</strong> ₹{{ product.price }}</li>
+        <li><strong>Order Date:</strong> {{ orderDate }}</li>
+        <li><strong>Delivery Date:</strong> {{ deliveryDate }}</li>
+        <li><strong>Address:</strong>
+          {{ address.first_name }} {{ address.last_name }}, {{ address.house_number }},
+          {{ address.street }} - {{ address.area }} - {{ address.pincode }}
+        </li>
+      </ul>
+      <p class="font-bold text-xl text-green-800 mb-8 select-none">
+        Total Price: ₹{{ totalPrice }}
+      </p>
+      <button (click)="proceedOnline()"
+              class="bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 rounded-md transition duration-300">
+        Proceed To Pay
+      </button>
+    </div>
+
+    <!-- Cash on Delivery -->
+    <div *ngIf="selectedMethod === 'offline'" class="bg-white rounded-lg shadow-lg p-8 mb-6">
+      <h2 class="text-2xl font-semibold mb-6 text-yellow-700 select-none">Cash on Delivery Details</h2>
+      <ul class="mb-6 text-gray-700 space-y-3 select-none">
+        <li><strong>Product:</strong> {{ product.name }}</li>
+        <li><strong>Quantity:</strong> {{ qty }}</li>
+        <li><strong>Price per kg:</strong> ₹{{ product.price }}</li>
+        <li><strong>Order Date:</strong> {{ orderDate }}</li>
+        <li><strong>Delivery Date:</strong> {{ deliveryDate }}</li>
+        <li><strong>Address:</strong>
+          {{ address.first_name }} {{ address.last_name }}, {{ address.house_number }},
+          {{ address.street }} - {{ address.area }} - {{ address.pincode }}
+        </li>
+      </ul>
+      <p class="font-bold text-xl text-yellow-800 mb-8 select-none">
+        Total Price: ₹{{ totalPrice }}
+      </p>
+      <button (click)="proceedCOD()"
+              class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-8 py-3 rounded-md transition duration-300">
+        Continue ₹{{ totalPrice }} (COD)
+      </button>
+    </div>
+
+  </div>
+</div>
