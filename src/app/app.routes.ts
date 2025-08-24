@@ -6,12 +6,17 @@ import { UserCategoryComponent } from './user/unauthoried/user-category-componen
 import { UserAboutUsComponent } from './user/unauthoried/user-about-us-component/user-about-us-component';
 import { UserSigninComponent } from './user/unauthoried/user-signin-component/user-signin-component';
 import { UserRegisterComponent } from './user/unauthoried/user-register-component/user-register-component';
+import { UserProductDetailsComponent } from './user/unauthoried/user-product-details-component/user-product-details-component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/farmvibe/home', pathMatch: 'full' },
   { path: 'farmvibe/home', component: HomePageComponent },
   { path: 'farmvibe/contact', component: UserContactComponent },
   { path: 'farmvibe/products', component: UserProductsComponent },
+  {
+    path: 'farmvibe/products/product-details',
+    component: UserProductDetailsComponent,
+  },
   { path: 'farmvibe/category', component: UserCategoryComponent },
   { path: 'farmvibe/about', component: UserAboutUsComponent },
   { path: 'farmvibe/signin', component: UserSigninComponent },

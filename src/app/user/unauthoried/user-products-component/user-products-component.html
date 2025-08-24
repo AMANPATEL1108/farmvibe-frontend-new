@@ -13,31 +13,21 @@
     *ngFor="let product of products"
     class="bg-white rounded-xl shadow-md p-4 flex flex-col hover:shadow-lg transition-shadow duration-300"
   >
-    <a href="#" class="block overflow-hidden rounded-lg hover-zoom no-underline">
-      <img
-        [src]="product.imageUrl"
-        [alt]="product.name"
-        class="w-full h-48 object-cover"
-      />
-    </a>
+    <!-- Relative link to child route -->
+    <a  [routerLink]="['/farmvibe/products/product-details']"  class="block overflow-hidden rounded-lg hover-zoom no-underline">
+      <img [src]="product.imageUrl" [alt]="product.name" class="w-full h-48 object-cover" />
+    </a>f<router-outlet></router-outlet>
+
 
     <div class="mt-4 flex flex-col flex-grow">
-  <a href="#"
-   class="text-lg font-semibold text-green-800 no-underline hover:text-green-600">
-  {{ product.name }}
-</a>
+      <a  [routerLink]="['/farmvibe/products/product-details']"    class="text-lg font-semibold text-green-800 no-underline hover:text-green-600">
+        {{ product.name }}
+      </a>
 
-      <p class="text-gray-700 text-sm mt-1 line-clamp-2">
-        {{ product.description }}
-      </p>
+      <p class="text-gray-700 text-sm mt-1 line-clamp-2">{{ product.description }}</p>
       <div class="mt-auto flex items-center justify-between mt-4">
-        <span class="text-xl font-bold text-red-600">
-          ₹{{ product.price }} / {{ product.weight }}
-        </span>
-        <span
-          class="text-sm"
-          [ngClass]="product.stock ? 'text-green-600' : 'text-red-600'"
-        >
+        <span class="text-xl font-bold text-red-600">₹{{ product.price }} / {{ product.weight }}</span>
+        <span class="text-sm" [ngClass]="product.stock ? 'text-green-600' : 'text-red-600'">
           {{ product.stock ? 'In Stock' : 'Out of Stock' }}
         </span>
       </div>

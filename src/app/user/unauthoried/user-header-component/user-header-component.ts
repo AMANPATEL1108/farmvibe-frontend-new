@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { UserFooterComponent } from '../user-footer-component/user-footer-component';
 import { RouterLink } from '@angular/router';
 
 @Component({
