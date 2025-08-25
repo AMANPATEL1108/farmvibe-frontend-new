@@ -13,13 +13,13 @@
         <h5 class="text-xl font-semibold mb-2">Quick Links</h5>
         <ul class="space-y-1 text-sm">
           <li>
-            <a routerLink="farmvibe/home" class="text-white no-underline hover:text-gray-300 transition">Home</a>
+            <a (click)="goToHomePage()" class="text-white no-underline hover:text-gray-300 transition">Home</a>
           </li>
           <li>
-            <a routerLink="farmvibe/about" class="text-white no-underline hover:text-gray-300 transition">About</a>
+            <a (click)="goToAboutPage()" class="text-white no-underline hover:text-gray-300 transition">About</a>
           </li>
           <li>
-            <a routerLink="farmvibe/contact" class="text-white no-underline hover:text-gray-300 transition">Contact</a>
+            <a (click)="goToContactPage()" class="text-white no-underline hover:text-gray-300 transition">Contact</a>
           </li>
         </ul>
       </div>

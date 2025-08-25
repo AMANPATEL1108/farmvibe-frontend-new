@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-payment-options-component',
@@ -10,6 +10,8 @@ import { BrowserModule } from '@angular/platform-browser';
   styleUrl: './user-payment-options-component.css',
 })
 export class UserPaymentOptionsComponent {
+  constructor(private router: Router) {}
+
   selectedMethod: 'online' | 'offline' = 'online';
 
   product = {
@@ -38,10 +40,10 @@ export class UserPaymentOptionsComponent {
   }
 
   proceedOnline() {
-    alert('Proceeding to online payment...');
+    this.router.navigate(['/farmvibe/products/payment-options/online']);
   }
 
   proceedCOD() {
-    alert('Order confirmed with Cash on Delivery!');
+    this.router.navigate(['/farmvibe/products/payment-options/cod']);
   }
 }

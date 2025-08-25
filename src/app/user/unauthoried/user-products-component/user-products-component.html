@@ -14,13 +14,13 @@
     class="bg-white rounded-xl shadow-md p-4 flex flex-col hover:shadow-lg transition-shadow duration-300"
   >
     <!-- Relative link to child route -->
-    <a  [routerLink]="['/farmvibe/products/product-details']"  class="block overflow-hidden rounded-lg hover-zoom no-underline">
+    <a  (click)="goToProductDetailsPage()"  class="block overflow-hidden rounded-lg hover-zoom no-underline">
       <img [src]="product.imageUrl" [alt]="product.name" class="w-full h-48 object-cover" />
-    </a>f<router-outlet></router-outlet>
+    </a>
 
 
     <div class="mt-4 flex flex-col flex-grow">
-      <a  [routerLink]="['/farmvibe/products/product-details']"    class="text-lg font-semibold text-green-800 no-underline hover:text-green-600">
+      <a  (click)="goToProductDetailsPage()"    class="text-lg font-semibold text-green-800 no-underline hover:text-green-600">
         {{ product.name }}
       </a>
 

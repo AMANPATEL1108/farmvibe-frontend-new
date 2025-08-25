@@ -1,15 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-products-component',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterOutlet],
+  imports: [CommonModule],
   templateUrl: './user-products-component.html',
   styleUrl: './user-products-component.css',
 })
 export class UserProductsComponent {
+  constructor(private router: Router) {}
+
   products = [
     {
       id: 1,
@@ -30,4 +32,8 @@ export class UserProductsComponent {
       imageUrl: 'https://via.placeholder.com/300x200.png?text=Organic+Carrots',
     },
   ];
+
+  goToProductDetailsPage() {
+    this.router.navigate(['/farmvibe/products/product-details']);
+  }
 }

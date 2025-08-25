@@ -11,20 +11,20 @@
 
       <!-- Navigation -->
       <nav class="flex gap-4 mb-2 md:mb-0">
-        <a routerLink="farmvibe/home" class="hover:text-blue-300 transition px-2 py-1 no-underline">Home</a>
-        <a routerLink="farmvibe/contact" class="hover:text-blue-300 transition px-2 py-1 no-underline">Contact</a>
-        <a routerLink="farmvibe/products" class="hover:text-blue-300 transition px-2 py-1 no-underline">Products</a>
-        <a routerLink="farmvibe/category" class="hover:text-blue-300 transition px-2 py-1 no-underline">Category</a>
-        <a routerLink="farmvibe/about" class="hover:text-blue-300 transition px-2 py-1 no-underline">About</a>
+        <a (click)="goToHomePage()"class="hover:text-blue-300 transition px-2 py-1 no-underline">Home</a>
+        <a (click)="goToContactPage()" class="hover:text-blue-300 transition px-2 py-1 no-underline">Contact</a>
+        <a (click)="goToProductPage()" class="hover:text-blue-300 transition px-2 py-1 no-underline">Products</a>
+        <a (click)="goToCategoryPage()" class="hover:text-blue-300 transition px-2 py-1 no-underline">Category</a>
+        <a (click)="goToAboutPage()" class="hover:text-blue-300 transition px-2 py-1 no-underline">About</a>
       </nav>
 
       <!-- Auth Buttons -->
       <div class="flex items-center gap-4">
-        <a routerLink="farmvibe/signin"
+        <a (click)="goToSignInPage()"
            class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-1.5 rounded shadow transition duration-200 no-underline">
           Sign In
         </a>
-        <a routerLink="farmvibe/register"
+        <a (click)="goToRegisterPage()"
            class="bg-green-500 hover:bg-green-600 text-white text-sm px-4 py-1.5 rounded shadow transition duration-200 no-underline"  style="background-color: rgb(49, 180, 140); color: white; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 600;">
           Register
         </a>

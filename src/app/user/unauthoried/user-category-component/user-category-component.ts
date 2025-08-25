@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-user-category-component',
@@ -9,6 +10,8 @@ import { Component } from '@angular/core';
   styleUrl: './user-category-component.css',
 })
 export class UserCategoryComponent {
+  constructor(private router: Router) {}
+
   categories = [
     {
       name: 'Vegetables',
@@ -21,4 +24,8 @@ export class UserCategoryComponent {
       category_image_url: 'assets/images/categories/fruits.webp',
     },
   ];
+
+  categoryProduct() {
+    this.router.navigate(['/farmvibe/category/product-category']);
+  }
 }
