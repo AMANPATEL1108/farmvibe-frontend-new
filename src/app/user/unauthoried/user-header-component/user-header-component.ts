@@ -1,14 +1,36 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-header-component',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './user-header-component.html',
-  styleUrl: './user-header-component.css',
+  styleUrls: ['./user-header-component.css'],
 })
 export class UserHeaderComponent {
+  dropdownOpen = false;
+
   constructor(private router: Router) {}
+
+  toggleDropdown() {
+    this.dropdownOpen = !this.dropdownOpen;
+  }
+
+  goToProfile() {
+    this.router.navigate(['farmvibe/user/user-profile']);
+  }
+
+  goToOrders() {
+    this.router.navigate(['/farmvibe/user/user-active-orders']);
+  }
+
+  logout() {
+    localStorage.removeItem('jwtToken');
+    localStorage.removeItem('jwtIssuedAt');
+    localStorage.removeItem('userId');
+    this.router.navigate(['/']);
+  }
 
   goToHomePage() {
     this.router.navigate(['/farmvibe/home']);
@@ -20,7 +42,7 @@ export class UserHeaderComponent {
     this.router.navigate(['/farmvibe/contact']);
   }
   goToCategoryPage() {
-    this.router.navigate(['farmvibe/category']);
+    this.router.navigate(['/farmvibe/category']);
   }
   goToProductPage() {
     this.router.navigate(['/farmvibe/products']);
@@ -28,7 +50,6 @@ export class UserHeaderComponent {
   goToSignInPage() {
     this.router.navigate(['/farmvibe/signin']);
   }
-
   goToRegisterPage() {
     this.router.navigate(['/farmvibe/register']);
   }

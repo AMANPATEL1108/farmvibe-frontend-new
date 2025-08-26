@@ -1,0 +1,104 @@
+<div class="max-w-7xl mx-auto p-6 mt-20 bg-gray-100 min-h-screen font-sans">
+
+  <!-- Back button -->
+  <div class="flex justify-start mb-6">
+    <button (click)="redirectToCurrentOrders()"
+      class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg shadow transition duration-300">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      Back to Current Orders
+    </button>
+  </div>
+
+  <!-- Example Delivery Section (static sample data) -->
+  <div class="mb-10 bg-white rounded-xl shadow-md p-6 animate-slide-fade-in">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4 border-b pb-2">
+      <span class="text-blue-600">2025-08-20</span>
+      <span class="text-sm font-normal text-gray-500 ml-2">Delivery Date</span>
+    </h2>
+
+    <div class="overflow-x-auto">
+      <table class="min-w-full table-auto bg-white border border-gray-300 rounded-lg">
+        <thead class="bg-gray-100 text-gray-700 text-sm uppercase">
+          <tr>
+            <th class="px-4 py-3 border">Order</th>
+            <th class="px-4 py-3 border">Details</th>
+            <th class="px-4 py-3 border">Customer</th>
+            <th class="px-4 py-3 border">Address</th>
+            <th class="px-4 py-3 border">Payment</th>
+            <th class="px-4 py-3 border">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="text-sm text-gray-700 hover:bg-gray-50 transition duration-200">
+            <!-- Order Identification -->
+            <td class="px-4 py-3 border">
+              <div class="flex flex-col">
+                <span class="font-medium">#1001</span>
+                <span class="text-xs text-gray-500">2025-08-18</span>
+              </div>
+            </td>
+
+            <!-- Order Details -->
+            <td class="px-4 py-3 border">
+              <div class="flex flex-col">
+                <span class="font-medium">Tomatoes</span>
+                <div class="flex justify-between mt-1">
+                  <span class="text-xs">Qty: 5</span>
+                  <span class="text-xs font-medium text-green-700">₹250</span>
+                </div>
+              </div>
+            </td>
+
+            <!-- Customer Info -->
+            <td class="px-4 py-3 border">
+              <div class="flex flex-col">
+                <span>Rahul Sharma</span>
+                <span class="text-xs text-gray-500">+91 9876543210</span>
+                <span class="text-xs text-gray-500 truncate">rahul@example.com</span>
+              </div>
+            </td>
+
+            <!-- Shipping -->
+            <td class="px-4 py-3 border text-xs">
+              <div>H.No 45, MG Road</div>
+              <div>Sector 12</div>
+              <div>Delhi - 110001</div>
+            </td>
+
+            <!-- Payment -->
+            <td class="px-4 py-3 border">
+              <div class="flex flex-col">
+                <span>UPI</span>
+                <span class="text-xs text-green-600">Paid</span>
+              </div>
+            </td>
+
+            <!-- Status -->
+            <td class="px-4 py-3 border">
+              <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                Delivered
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Download Invoice -->
+    <div class="mt-4 text-right">
+      <button (click)="downloadInvoice('2025-08-20')"
+        class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2.5 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>
+        Download Invoice
+      </button>
+    </div>
+  </div>
+</div>

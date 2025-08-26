@@ -1,0 +1,86 @@
+<div class="p-6 font-sans max-w-7xl mx-auto mt-20">
+
+  <!-- Old Orders Button -->
+  <div class="flex justify-end mb-6">
+    <button (click)="redirectToOldOrders()"
+      class="inline-block bg-gray-700 hover:bg-gray-800 text-white text-sm font-medium px-4 py-2 rounded-lg shadow transition duration-300">
+      Old Order History
+    </button>
+  </div>
+
+  <!-- Order Card -->
+  <div class="mb-10 bg-white rounded-xl shadow-md p-6 animate-slide-fade-in transition transform hover:scale-[1.01] duration-300">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4 border-b pb-2">
+      Delivery Date: <span class="text-blue-600 font-medium">2025-08-24</span>
+    </h2>
+
+    <div class="overflow-x-auto">
+      <table class="min-w-full table-auto bg-white border border-gray-300 rounded-lg">
+        <thead class="bg-gray-100 text-gray-700 text-sm uppercase">
+          <tr>
+            <th class="px-4 py-3 border">Order ID</th>
+            <th class="px-4 py-3 border">Date</th>
+            <th class="px-4 py-3 border">Product</th>
+            <th class="px-4 py-3 border">Qty</th>
+            <th class="px-4 py-3 border">Price</th>
+            <th class="px-4 py-3 border">Customer</th>
+            <th class="px-4 py-3 border">Contact</th>
+            <th class="px-4 py-3 border">Address</th>
+            <th class="px-4 py-3 border">Payment</th>
+            <th class="px-4 py-3 border">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="text-sm text-gray-700 hover:bg-gray-50 transition duration-200">
+            <td class="px-4 py-2 border font-medium">ORD12345</td>
+            <td class="px-4 py-2 border">
+              <div class="flex flex-col">
+                <span class="text-xs">Ordered:</span>
+                <span>2025-08-20</span>
+              </div>
+            </td>
+            <td class="px-4 py-2 border">Wheat Bag</td>
+            <td class="px-4 py-2 border text-center">2</td>
+            <td class="px-4 py-2 border font-medium text-green-700">₹1200</td>
+            <td class="px-4 py-2 border">
+              <div class="flex flex-col">
+                <span>Ravi Kumar</span>
+                <span class="text-xs text-gray-500">ravi@example.com</span>
+              </div>
+            </td>
+            <td class="px-4 py-2 border">9876543210</td>
+            <td class="px-4 py-2 border">
+              <div class="space-y-1 text-sm">
+                <div class="font-medium">123, MG Road</div>
+                <div>Bangalore</div>
+                <div>Bangalore - 560001</div>
+              </div>
+            </td>
+            <td class="px-4 py-2 border">
+              <div class="flex flex-col">
+                <span>UPI</span>
+                <span class="text-xs text-green-600">Paid</span>
+              </div>
+            </td>
+            <td class="px-4 py-2 border">
+              <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Delivered</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Download Invoice -->
+    <div class="mt-4 text-right">
+      <button (click)="downloadInvoice('2025-08-24')"
+        class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2.5 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>
+        Download Invoice
+      </button>
+    </div>
+  </div>
+</div>

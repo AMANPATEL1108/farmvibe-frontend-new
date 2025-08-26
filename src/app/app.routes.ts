@@ -12,6 +12,11 @@ import { UserPaymentOptionsComponent } from './user/authorized/user-payment-opti
 import { UserOrderCodConfirmationComponent } from './user/authorized/user-order-cod-confirmation-component/user-order-cod-confirmation-component';
 import { UserOrderOnlineConfirmationComponent } from './user/authorized/user-order-online-confirmation-component/user-order-online-confirmation-component';
 import { UserProdutsCategoryComponent } from './user/unauthoried/user-produts-category-component/user-produts-category-component';
+import { UserProfileDetailsComponent } from './user/authorized/user-profile-details-component/user-profile-details-component';
+import { UserActiveOrderListComponent } from './user/authorized/user-active-order-list-component/user-active-order-list-component';
+import { UserOlderOrderListComponent } from './user/authorized/user-older-order-list-component/user-older-order-list-component';
+import { UserForgotPasswordComponent } from './user/unauthoried/user-forgot-password-component/user-forgot-password-component';
+import { UserUpdatePasswordComponent } from './user/unauthoried/user-update-password-component/user-update-password-component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/farmvibe/home', pathMatch: 'full' },
@@ -44,4 +49,24 @@ export const routes: Routes = [
   { path: 'farmvibe/about', component: UserAboutUsComponent },
   { path: 'farmvibe/signin', component: UserSigninComponent },
   { path: 'farmvibe/register', component: UserRegisterComponent },
+  {
+    path: 'farmvibe/user/user-profile',
+    component: UserProfileDetailsComponent,
+  },
+  {
+    path: 'farmvibe/user/user-active-orders',
+    component: UserActiveOrderListComponent,
+  },
+  {
+    path: 'farmvibe/user/user-older-orders',
+    component: UserOlderOrderListComponent,
+  },
+  {
+    path: 'farmvibe/forgot-password',
+    component: UserForgotPasswordComponent,
+  },
+  {
+    path: 'farmvibe/user/update-password',
+    component: UserUpdatePasswordComponent,
+  },
 ];

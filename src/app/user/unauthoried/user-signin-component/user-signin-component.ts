@@ -12,4 +12,8 @@ export class UserSigninComponent {
   goToForgotPassword() {
     this.router.navigate(['/farmvibe/forgot-password']);
   }
+
+  goTologinUser() {
+    this.router.navigate(['/farmvibe/home']);
+  }
 }
