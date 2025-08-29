@@ -26,6 +26,7 @@ import { AdminAuthorizedProductsComponent } from './admin/authorized/admin-autho
 import { AdminAuthorizedUsersDashboardComponent } from './admin/authorized/admin-authorized-users-dashboard-component/admin-authorized-users-dashboard-component';
 import { AdminAuthorizedOrdersDashboardComponent } from './admin/authorized/admin-authorized-orders-dashboard-component/admin-authorized-orders-dashboard-component';
 import { AdminAuthorizedProfileDashboardComponent } from './admin/authorized/admin-authorized-profile-dashboard-component/admin-authorized-profile-dashboard-component';
+import { AdminAuthorizedAdminRegisterComponent } from './admin/authorized/admin-authorized-admin-register-component/admin-authorized-admin-register-component';
 
 // export const routes: Routes = [
 //   { path: '', redirectTo: '/farmvibe/home', pathMatch: 'full' },
@@ -172,6 +173,10 @@ export const routes: Routes = [
       {
         path: 'admin-profile',
         component: AdminAuthorizedProfileDashboardComponent,
+      },
+      {
+        path: 'admin-register',
+        component: AdminAuthorizedAdminRegisterComponent,
       },
       { path: '', redirectTo: 'home', pathMatch: 'full' },
     ],

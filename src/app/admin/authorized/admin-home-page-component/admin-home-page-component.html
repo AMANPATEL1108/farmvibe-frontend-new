@@ -1,1 +1,100 @@
-<p>admin-home-page-component works!</p>
+<div class="bg-gray-800 min-h-screen p-6 text-gray-100">
+
+  <!-- Title -->
+  <h1 class="text-4xl font-bold text-center mb-10 text-green-400 animate__animated animate__fadeInDown">
+    Farm Vibe Admin Dashboard
+  </h1>
+
+  <!-- Add Admin & Filter Section -->
+  <div class="flex flex-col md:flex-row justify-between items-center mb-6 space-y-4 md:space-y-0 md:space-x-4 animate__animated animate__fadeInRight">
+    <button (click)="adminRegister()" class="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition">➕ Add New Admin</button>
+    <div class="flex items-center space-x-2">
+      <label class="font-medium">Filter by Date:</label>
+      <select class="px-3 py-2 border border-gray-600 bg-gray-800 text-gray-100 rounded">
+        <option>Today</option>
+        <option>Last 7 Days</option>
+        <option>Last 30 Days</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10 animate__animated animate__fadeInUp">
+    <div class="bg-gray-800 p-6 rounded-xl shadow text-center hover:scale-105 transition">
+      <h2 class="text-2xl font-semibold">Users</h2>
+      <p class="text-3xl text-green-400 font-bold mt-2">1,420</p>
+    </div>
+    <div class="bg-gray-800 p-6 rounded-xl shadow text-center hover:scale-105 transition">
+      <h2 class="text-2xl font-semibold">Orders</h2>
+      <p class="text-3xl text-green-400 font-bold mt-2">1,032</p>
+    </div>
+    <div class="bg-gray-800 p-6 rounded-xl shadow text-center hover:scale-105 transition">
+      <h2 class="text-2xl font-semibold">Completed Today</h2>
+      <p class="text-3xl text-green-400 font-bold mt-2">84</p>
+    </div>
+    <div class="bg-gray-800 p-6 rounded-xl shadow text-center hover:scale-105 transition">
+      <h2 class="text-2xl font-semibold">Revenue</h2>
+      <p class="text-3xl text-green-400 font-bold mt-2">₹75,600</p>
+    </div>
+  </div>
+
+  <!-- Charts Section -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+
+    <!-- Orders by Category -->
+    <div class="bg-gray-800 p-5 rounded-xl shadow animate__animated animate__fadeInLeft flex flex-col items-center">
+      <h3 class="text-lg font-semibold mb-3 text-center">Orders by Category</h3>
+      <div class="w-full max-w-lg h-64 flex items-center justify-center">
+        <canvas #ordersByCategoryChart class="w-full h-full"></canvas>
+      </div>
+    </div>
+
+    <!-- Daily Orders -->
+    <div class="bg-gray-800 p-5 rounded-xl shadow animate__animated animate__fadeInRight flex flex-col items-center">
+      <h3 class="text-lg font-semibold mb-3 text-center">Daily Orders (Past Week)</h3>
+      <div class="w-full max-w-lg h-64 flex items-center justify-center">
+        <canvas #dailyOrdersChart class="w-full h-full"></canvas>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Revenue & Right Panel -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+
+    <!-- Revenue Chart -->
+    <div class="bg-gray-800 p-5 rounded-xl shadow animate__animated animate__fadeInLeft flex flex-col items-center">
+      <h2 class="text-lg font-bold mb-3 text-gray-100">Revenue (Last 7 Days)</h2>
+      <div class="w-full max-w-lg h-64 flex items-center justify-center">
+        <canvas #revenueChart class="w-full h-full"></canvas>
+      </div>
+    </div>
+
+    <!-- Top Selling Products & Recent Activities -->
+    <div class="grid grid-cols-1 gap-4 animate__animated animate__fadeInRight">
+      <div class="bg-gray-800 p-5 rounded-xl shadow">
+        <h2 class="text-base font-bold mb-2">Top Selling Products</h2>
+        <ul class="list-disc pl-5 space-y-1 text-gray-300 text-sm">
+          <li>Fresh Mangoes - 320 units</li>
+          <li>Organic Tomatoes - 280 units</li>
+          <li>Farm Milk - 210 bottles</li>
+          <li>Free-range Eggs - 190 dozen</li>
+          <li>Banana Leaves - 160 packs</li>
+        </ul>
+      </div>
+
+      <div class="bg-gray-800 p-5 rounded-xl shadow">
+        <h2 class="text-base font-bold mb-2">Recent User Activities</h2>
+        <ul class="space-y-1 text-gray-300 text-sm">
+          <li>🟢 John placed an order worth ₹1,200</li>
+          <li>🟢 Aarti signed up</li>
+          <li>🟢 Ravi updated shipping address</li>
+          <li>🟢 Suman placed an order worth ₹850</li>
+          <li>🟢 Komal left a product review</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+</div>
