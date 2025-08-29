@@ -1,0 +1,76 @@
+<header class="bg-gray-900 text-white py-3">
+  <div class="container mx-auto">
+    <div class="flex flex-col md:flex-row items-center justify-between">
+
+      <!-- Logo -->
+      <div class="mb-2 md:mb-0">
+        <a (click)="adminHomeDashboard()" class="logo-link no-underline transition">
+          <h1 class="text-2xl font-extrabold tracking-wide">🌾 Farm Vibe</h1>
+        </a>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="flex gap-4 mb-2 md:mb-0">
+        <a (click)="adminHomeDashboard()"
+           routerLinkActive="active-link"
+           class="nav-link px-2 py-1 no-underline transition">
+          Dashboard
+        </a>
+        <a (click)="adminProduct()"
+           routerLinkActive="active-link"
+           class="nav-link px-2 py-1 no-underline transition">
+          Products
+        </a>
+        <a (click)="adminUsersDashboard()"
+           routerLinkActive="active-link"
+           class="nav-link px-2 py-1 no-underline transition">
+          Users
+        </a>
+        <a (click)="adminOrdersDashboard()"
+           routerLinkActive="active-link"
+           class="nav-link px-2 py-1 no-underline transition">
+          Orders
+        </a>
+      </nav>
+
+      <!-- Auth + Profile -->
+      <div class="flex items-center gap-4 relative">
+
+        <!-- Sign In -->
+        <a (click)="adminLogout()"
+           class="btn-signin text-white text-sm px-4 py-1.5 rounded shadow transition duration-200 no-underline">
+          LogOut
+        </a>
+
+        <!-- Profile -->
+        <div class="relative">
+          <a (click)="adminProfilePage()"
+             routerLinkActive="active-link"
+             class="profile-link focus:outline-none flex flex-col items-center transition no-underline">
+            <img src="assets/logo/user.png" alt="Profile"
+                 class="w-9 h-9 rounded-full border-2 border-white"/>
+            <p class="text-xs text-center mt-1">Aman</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inline styles to force white default and #4caf50 on hover/active -->
+  <style>
+    /* default link color in this header */
+    header a { color: #ffffff; text-decoration: none; }
+
+    /* hover green */
+    header .nav-link:hover,
+    header .logo-link:hover,
+    header .profile-link:hover { color: #4caf50; }
+
+    /* active route via routerLinkActive */
+    header a.active-link { color: #4caf50; font-weight: 700; }
+
+    /* sign-in button green */
+    header .btn-signin { background-color: #4caf50; }
+    header .btn-signin:hover { background-color: #43a047; } /* slightly darker */
+  </style>
+</header>

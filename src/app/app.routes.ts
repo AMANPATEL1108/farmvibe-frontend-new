@@ -20,6 +20,12 @@ import { UserUpdatePasswordComponent } from './user/unauthoried/user-update-pass
 import { AdminLoginComponent } from './admin/unauthorized/admin-login-component/admin-login-component';
 import { AdminLayoutComponent } from './admin/unauthorized/admin-layout-component/admin-layout-component';
 import { UserLayoutComponent } from './user/unauthoried/user-layout-component/user-layout-component';
+import { AdminAuthorizedLayoutComponent } from './admin/authorized/admin-authorized-layout-component/admin-authorized-layout-component';
+import { AdminHomePageComponent } from './admin/authorized/admin-home-page-component/admin-home-page-component';
+import { AdminAuthorizedProductsComponent } from './admin/authorized/admin-authorized-products-component/admin-authorized-products-component';
+import { AdminAuthorizedUsersDashboardComponent } from './admin/authorized/admin-authorized-users-dashboard-component/admin-authorized-users-dashboard-component';
+import { AdminAuthorizedOrdersDashboardComponent } from './admin/authorized/admin-authorized-orders-dashboard-component/admin-authorized-orders-dashboard-component';
+import { AdminAuthorizedProfileDashboardComponent } from './admin/authorized/admin-authorized-profile-dashboard-component/admin-authorized-profile-dashboard-component';
 
 // export const routes: Routes = [
 //   { path: '', redirectTo: '/farmvibe/home', pathMatch: 'full' },
@@ -96,6 +102,7 @@ export const routes: Routes = [
     path: 'farmvibe',
     component: UserLayoutComponent,
     children: [
+      { path: '', redirectTo: 'home', pathMatch: 'full' }, // ✅ add this
       { path: 'home', component: HomePageComponent },
       { path: 'contact', component: UserContactComponent },
       { path: 'products', component: UserProductsComponent },
@@ -145,6 +152,28 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'login', pathMatch: 'full' },
       { path: 'login', component: AdminLoginComponent },
+    ],
+  },
+  {
+    path: 'farmvibe/authorized/admin',
+    component: AdminAuthorizedLayoutComponent,
+    children: [
+      { path: 'admin-dashboard-home', component: AdminHomePageComponent },
+      { path: 'admin-products', component: AdminAuthorizedProductsComponent },
+
+      {
+        path: 'users-dashboard',
+        component: AdminAuthorizedUsersDashboardComponent,
+      },
+      {
+        path: 'orders-dashboard',
+        component: AdminAuthorizedOrdersDashboardComponent,
+      },
+      {
+        path: 'admin-profile',
+        component: AdminAuthorizedProfileDashboardComponent,
+      },
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
     ],
   },
 ];

@@ -1,0 +1,46 @@
+<footer class="text-white bg-gray-900 py-6">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left">
+
+      <!-- Logo + Copy -->
+      <div>
+        <h5 class="text-2xl font-bold mb-2">🌾 Farm Vibe</h5>
+        <p class="text-sm text-gray-300">&copy; 2025 Farm Vibe. All rights reserved.</p>
+      </div>
+
+      <div>
+        <h5 class="text-xl font-semibold mb-2">Quick Links</h5>
+        <ul class="space-y-1 text-sm">
+          <li><a (click)="adminHomeDashboard()" class="text-white no-underline hover:text-gray-300 transition">Dashboard</a></li>
+          <li><a (click)="adminProduct()" class="text-white no-underline hover:text-gray-300 transition">Products</a></li>
+          <li><a (click)=" adminUsersDashboard()" class="text-white no-underline hover:text-gray-300 transition">Users</a></li>
+          <li><a (click)=" adminOrdersDashboard()" class="text-white no-underline hover:text-gray-300 transition">Orders</a></li>
+
+        </ul>
+      </div>
+
+      <!-- Social -->
+      <div>
+        <h5 class="text-xl font-semibold mb-2">Follow Us</h5>
+        <div class="flex justify-center md:justify-start gap-4 text-2xl">
+          <a href="#" class="text-gray-300 hover:text-[#4caf50] transition duration-300">
+            <i class="bi bi-facebook"></i>
+          </a>
+          <a href="#" class="text-gray-300 hover:text-[#4caf50] transition duration-300">
+            <i class="bi bi-twitter"></i>
+          </a>
+          <a href="#" class="text-gray-300 hover:text-[#4caf50] transition duration-300">
+            <i class="bi bi-instagram"></i>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Inline style to ensure links default white, hover green -->
+  <style>
+    footer a { color: #ffffff; text-decoration: none; }
+    footer a:hover { color: #4caf50; }
+  </style>
+</footer>
