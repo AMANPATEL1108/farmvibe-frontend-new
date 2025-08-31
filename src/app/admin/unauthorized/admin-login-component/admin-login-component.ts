@@ -13,4 +13,7 @@ export class AdminLoginComponent {
   adminLogin() {
     this.router.navigate(['farmvibe/authorized/admin/admin-dashboard-home']);
   }
+  forgotAdminPassword() {
+    this.router.navigate(['farmvibe/admin/forgot-admin-password']);
+  }
 }

@@ -1,0 +1,131 @@
+<div class="text-center mt-8 animate-fade-in-up">
+  <h1 class="text-3xl font-bold text-green-700">Edit Product</h1>
+  <p class="text-gray-500">Update product details below</p>
+</div>
+
+<div
+  class="max-w-3xl mx-auto mt-8 bg-white p-8 rounded-lg shadow-lg animate-fade-in-up"
+>
+  <form>
+    <!-- Product Name -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1"
+        >Product Name</label
+      >
+      <input
+        type="text"
+        [(ngModel)]="product.name"
+        name="name"
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+      />
+    </div>
+
+    <!-- Category -->
+    <div class="mt-4">
+      <label class="block text-sm font-medium text-gray-700 mb-1"
+        >Category</label
+      >
+      <select
+        [(ngModel)]="product.category"
+        name="category"
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+      >
+        <option>Fruits</option>
+        <option>Vegetables</option>
+        <option>Grains</option>
+        <option>Dairy</option>
+      </select>
+    </div>
+
+    <!-- Price and Quantity -->
+    <div class="grid grid-cols-2 gap-4 mt-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1"
+          >Price per kg (₹)</label
+        >
+        <input
+          type="number"
+          [(ngModel)]="product.price"
+          name="price"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+        />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1"
+          >Available Quantity (kg)</label
+        >
+        <input
+          type="number"
+          [(ngModel)]="product.quantity"
+          name="quantity"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+        />
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="mt-4">
+      <label class="block text-sm font-medium text-gray-700 mb-1"
+        >Description</label
+      >
+      <textarea
+        [(ngModel)]="product.description"
+        name="description"
+        rows="4"
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+      ></textarea>
+    </div>
+
+    <!-- Product Image -->
+    <div class="mt-4">
+      <label class="block text-sm font-medium text-gray-700 mb-2"
+        >Product Image</label
+      >
+      <div class="flex items-center space-x-4">
+        <img
+          [src]="product.image"
+          alt="Current Image"
+          class="w-24 h-24 rounded object-cover border border-gray-300"
+        />
+        <input
+          type="file"
+          (change)="onFileChange($event)"
+          class="px-3 py-2 border rounded-lg text-sm border-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-green-500 file:text-white hover:file:bg-green-600"
+        />
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-end space-x-4 mt-6">
+      <button
+        type="button"
+        (click)="onCancel()"
+        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium px-5 py-2 rounded-lg transition"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        (click)="onSave()"
+        class="bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2 rounded-lg transition"
+      >
+        Save Changes
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- ✅ Success Modal -->
+<div
+  *ngIf="showUpdateSuccess"
+  class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+>
+  <div
+    class="bg-white rounded-2xl shadow-xl p-6 w-96 animate-fade-in-up text-center"
+  >
+    <h2 class="text-xl font-bold text-green-600 mb-2">
+      ✅ Product Updated Successfully!
+    </h2>
+    <p class="text-gray-600">Redirecting to products page...</p>
+  </div>
+</div>

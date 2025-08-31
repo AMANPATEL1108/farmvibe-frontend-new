@@ -1,0 +1,130 @@
+<!-- Page Title -->
+<div class="text-center mt-10 animate-fade-in-up">
+  <h1 class="text-3xl font-bold text-green-700">Completed Orders</h1>
+  <p class="text-gray-600 mt-1">All orders that are fully delivered and paid</p>
+</div>
+
+<!-- Orders Table -->
+<div class="max-w-7xl mx-auto bg-white p-6 mt-8 rounded-lg shadow-lg animate-fade-in-up overflow-x-auto mb-10">
+  <table class="min-w-full text-sm text-left text-gray-700 table-auto">
+    <thead class="bg-gray-100 uppercase text-xs text-gray-600">
+      <tr>
+        <th class="px-4 py-3">#</th>
+        <th class="px-4 py-3">Customer</th>
+        <th class="px-4 py-3">Address</th>
+        <th class="px-4 py-3">Order Details</th>
+        <th class="px-4 py-3">Category</th>
+        <th class="px-4 py-3">Payment Status</th>
+        <th class="px-4 py-3">Delivery Status</th>
+        <th class="px-4 py-3">Order Date</th>
+        <th class="px-4 py-3">Requested Delivery Date</th>
+        <th class="px-4 py-3">Confirmed</th>
+        <th class="px-4 py-3">More Details</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200">
+      <tr *ngFor="let order of orders" class="hover:bg-gray-50">
+        <td class="px-4 py-3 font-medium">{{ order.id }}</td>
+        <td class="px-4 py-3">{{ order.customer }}</td>
+        <td class="px-4 py-3">{{ order.address }}</td>
+        <td class="px-4 py-3">
+          <div *ngFor="let item of order.details">{{ item }}</div>
+        </td>
+        <td class="px-4 py-3">{{ order.category }}</td>
+        <td class="px-4 py-3">
+          <span
+            class="px-2 py-1 text-xs font-semibold rounded"
+            [ngClass]="{
+              'bg-green-100 text-green-700': order.paymentStatus === 'Paid',
+              'bg-yellow-100 text-yellow-700': order.paymentStatus === 'Unpaid'
+            }"
+          >
+            {{ order.paymentStatus }}
+          </span>
+        </td>
+        <td class="px-4 py-3">
+          <span
+            class="px-2 py-1 text-xs font-semibold rounded"
+            [ngClass]="{
+              'bg-green-100 text-green-700': order.deliveryStatus === 'Delivered',
+              'bg-yellow-100 text-yellow-700': order.deliveryStatus === 'In Transit',
+              'bg-red-100 text-red-700': order.deliveryStatus === 'Not Delivered'
+            }"
+          >
+            {{ order.deliveryStatus }}
+          </span>
+        </td>
+        <td class="px-4 py-3">{{ order.orderDate }}</td>
+        <td class="px-4 py-3">{{ order.requestedDate }}</td>
+        <td class="px-4 py-3">
+          <span
+            class="px-2 py-1 text-xs font-semibold rounded"
+            [ngClass]="{
+              'bg-blue-100 text-blue-700': order.confirmed === 'Confirmed',
+              'bg-gray-100 text-gray-700': order.confirmed === 'Pending'
+            }"
+          >
+            {{ order.confirmed }}
+          </span>
+        </td>
+        <td class="px-4 py-3">
+          <button
+            (click)="showDetails(order)"
+            class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition"
+          >
+            View
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Details Modal -->
+<div
+  *ngIf="selectedOrder"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  (click)="closeDetails()"
+>
+  <div
+    class="bg-white p-6 rounded-lg shadow-xl w-96 max-w-full animate-fade-in-up relative"
+    (click)="$event.stopPropagation()"
+  >
+    <h2 class="text-2xl font-semibold mb-4">Order Details</h2>
+  <div class="space-y-2">
+  <p><strong>Customer:</strong> {{ selectedOrder.customer }}</p>
+  <p><strong>Address:</strong> {{ selectedOrder.address }}</p>
+
+  <div>
+    <strong>Order Details:</strong>
+    <ul class="list-disc ml-5">
+      <li *ngFor="let item of selectedOrder.details">{{ item }}</li>
+    </ul>
+  </div>
+
+  <p><strong>Category:</strong> {{ selectedOrder.category }}</p>
+  <p><strong>Payment Status:</strong> {{ selectedOrder.paymentStatus }}</p>
+  <p><strong>Delivery Status:</strong> {{ selectedOrder.deliveryStatus }}</p>
+  <p><strong>Order Date:</strong> {{ selectedOrder.orderDate }}</p>
+  <p><strong>Requested Delivery Date:</strong> {{ selectedOrder.requestedDate }}</p>
+  <p><strong>Confirmed:</strong> {{ selectedOrder.confirmed }}</p>
+</div>
+
+    <button
+      (click)="closeDetails()"
+      class="absolute top-3 right-3 text-gray-600 hover:text-gray-900 text-lg font-bold"
+    >
+      ×
+    </button>
+  </div>
+</div>
+
+<!-- Back Button -->
+<div class="text-center mb-10 animate-fade-in-up">
+  <a
+    routerLink="/farmvibe/authorized/admin/aorders"
+    class="inline-block px-6 py-2 text-sm font-semibold text-white bg-gray-600 hover:bg-gray-700 rounded transition duration-300 mb-10"
+  >
+    ← Back to Orders
+  </a>
+</div>

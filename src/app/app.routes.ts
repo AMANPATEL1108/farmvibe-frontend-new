@@ -27,6 +27,11 @@ import { AdminAuthorizedUsersDashboardComponent } from './admin/authorized/admin
 import { AdminAuthorizedOrdersDashboardComponent } from './admin/authorized/admin-authorized-orders-dashboard-component/admin-authorized-orders-dashboard-component';
 import { AdminAuthorizedProfileDashboardComponent } from './admin/authorized/admin-authorized-profile-dashboard-component/admin-authorized-profile-dashboard-component';
 import { AdminAuthorizedAdminRegisterComponent } from './admin/authorized/admin-authorized-admin-register-component/admin-authorized-admin-register-component';
+import { AdminAuthorizedAdminAddProductComponent } from './admin/authorized/admin-authorized-admin-add-product-component/admin-authorized-admin-add-product-component';
+import { AdminAuthorizedAdminEditProductComponent } from './admin/authorized/admin-authorized-admin-edit-product-component/admin-authorized-admin-edit-product-component';
+import { AdminAuthorizedAdminOrderHistoryComponent } from './admin/authorized/admin-authorized-admin-order-history-component/admin-authorized-admin-order-history-component';
+import { AdminAdminForgotPasswordComponent } from './admin/unauthorized/admin-admin-forgot-password-component/admin-admin-forgot-password-component';
+import { AdminAuthorizedAdminUpdatePasswordComponent } from './admin/unauthorized/admin-authorized-admin-update-password-component/admin-authorized-admin-update-password-component';
 
 // export const routes: Routes = [
 //   { path: '', redirectTo: '/farmvibe/home', pathMatch: 'full' },
@@ -153,6 +158,14 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'login', pathMatch: 'full' },
       { path: 'login', component: AdminLoginComponent },
+      {
+        path: 'forgot-admin-password',
+        component: AdminAdminForgotPasswordComponent,
+      },
+      {
+        path: 'update-password-admin',
+        component: AdminAuthorizedAdminUpdatePasswordComponent,
+      },
     ],
   },
   {
@@ -178,6 +191,19 @@ export const routes: Routes = [
         path: 'admin-register',
         component: AdminAuthorizedAdminRegisterComponent,
       },
+      {
+        path: 'add-product',
+        component: AdminAuthorizedAdminAddProductComponent,
+      },
+      {
+        path: 'edit-product',
+        component: AdminAuthorizedAdminEditProductComponent,
+      },
+      {
+        path: 'old-orders-history',
+        component: AdminAuthorizedAdminOrderHistoryComponent,
+      },
+
       { path: '', redirectTo: 'home', pathMatch: 'full' },
     ],
   },

@@ -36,15 +36,11 @@ export class AdminAuthorizedProductsComponent {
   constructor(private router: Router, private ngZone: NgZone) {}
 
   navigateToAddProduct() {
-    this.router.navigate(['/admin/pageUrl'], {
-      queryParams: { page: 'aaddProduct' },
-    });
+    this.router.navigate(['/farmvibe/authorized/admin/add-product'], {});
   }
 
   navigateToEditProduct(product: any) {
-    this.router.navigate(['/admin/pageUrl'], {
-      queryParams: { page: 'editProduct', name: product.name },
-    });
+    this.router.navigate(['/farmvibe/authorized/admin/edit-product'], {});
   }
 
   openDeleteModal(product: any) {

@@ -1,1 +1,154 @@
-<p>admin-authorized-orders-dashboard-component works!</p>
+<div class="p-6 relative">
+  <h1
+    class="text-3xl font-bold mb-6 text-center animate__animated animate__fadeInDown"
+  >
+    Admin Orders Page
+  </h1>
+
+  <!-- View Completed Orders -->
+  <div class="absolute right-6 top-6">
+<a
+  (click)="olderOrderCompleted()"
+  class="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 transition no-underline"
+>
+  Older Orders Completed
+</a>
+
+  </div>
+
+  <!-- Orders Table -->
+  <div class="overflow-x-auto animate__animated animate__fadeInUp mt-12 mb-10">
+    <table class="min-w-full bg-white rounded-lg shadow-md">
+      <thead class="bg-gray-800 text-white">
+        <tr>
+          <th class="px-4 py-2 text-left">#</th>
+          <th class="px-4 py-2 text-left">Name</th>
+          <th class="px-4 py-2 text-left">Address</th>
+          <th class="px-4 py-2 text-left">Order Details</th>
+          <th class="px-4 py-2 text-left">Category</th>
+          <th class="px-4 py-2 text-left">Preferred Delivery Date</th>
+          <th class="px-4 py-2 text-left">Order Date</th>
+          <th class="px-4 py-2 text-left">Payment Status</th>
+          <th class="px-4 py-2 text-left">Delivery Status</th>
+          <th class="px-4 py-2 text-left">Confirm</th>
+          <th class="px-4 py-2 text-left">More Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let order of orders"
+          class="border-t hover:bg-gray-100 transition"
+        >
+          <td class="px-4 py-2">{{ order.id }}</td>
+          <td class="px-4 py-2">{{ order.name }}</td>
+          <td class="px-4 py-2">{{ order.address }}</td>
+          <td class="px-4 py-2">{{ order.orderDetails }}</td>
+          <td class="px-4 py-2">{{ order.category }}</td>
+          <td class="px-4 py-2">{{ order.preferredDate }}</td>
+          <td class="px-4 py-2">{{ order.orderDate }}</td>
+          <td class="px-4 py-2">
+            <select class="bg-white border rounded px-2 py-1">
+              <option>Pending</option>
+              <option>Completed</option>
+            </select>
+          </td>
+          <td class="px-4 py-2">
+            <select class="bg-white border rounded px-2 py-1">
+              <option>Not Delivered</option>
+              <option>Delivered</option>
+            </select>
+          </td>
+          <td class="px-4 py-2">
+            <button
+              (click)="showConfirmPopup()"
+              class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition"
+            >
+              Confirm
+            </button>
+          </td>
+          <td class="px-4 py-2">
+            <button
+              (click)="showMoreDetails(order)"
+              class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition"
+            >
+              More Details
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Confirm Modal -->
+<div
+  *ngIf="confirmModal"
+  class="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50"
+>
+  <div
+    class="bg-white p-6 rounded-lg shadow-xl w-96 animate__animated animate__fadeInDown max-w-full"
+  >
+    <h2 class="text-2xl font-semibold mb-4">Confirm Order</h2>
+    <p class="mb-6">Are you sure you want to confirm this order?</p>
+    <div class="flex justify-end space-x-4">
+      <button
+        (click)="hideConfirmPopup()"
+        class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 transition"
+      >
+        Cancel
+      </button>
+      <button
+        (click)="confirmOrder()"
+        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+      >
+        Confirm
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Success Modal -->
+<div
+  *ngIf="successPopup"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  (click)="closeSuccessModal()"
+>
+  <div
+    class="bg-white p-8 rounded-2xl w-96 shadow-2xl text-center animate-fade-in-up"
+    (click)="$event.stopPropagation()"
+  >
+    <h2 class="text-2xl text-green-700 font-bold mb-4">✅ Order confirmed successfully!</h2>
+    <button
+      (click)="closeSuccessModal()"
+      class="mt-4 px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg"
+    >
+      Close
+    </button>
+  </div>
+</div>
+
+
+<!-- More Details Modal -->
+<div
+  *ngIf="moreDetailsModal"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+>
+  <div
+    class="bg-white p-6 rounded-lg shadow-xl w-96 animate__animated animate__fadeInDown max-w-full"
+  >
+    <h2 class="text-2xl font-semibold mb-4">Customer Details</h2>
+    <p><strong>Name:</strong> {{ selectedOrder?.name }}</p>
+    <p class="mt-2"><strong>Email:</strong> {{ selectedOrder?.email }}</p>
+    <p class="mt-2">
+      <strong>Mobile Number:</strong> {{ selectedOrder?.mobile }}
+    </p>
+    <div class="text-right mt-6">
+      <button
+        (click)="closeMoreDetails()"
+        class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>
