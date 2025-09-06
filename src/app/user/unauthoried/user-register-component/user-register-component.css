@@ -1,0 +1,28 @@
+/* Add these styles to your existing CSS file */
+.border-red-500 {
+  border-color: #ef4444 !important;
+}
+
+.object-contain {
+  object-fit: contain;
+}
+
+/* Animation for error messages */
+.animate__animated {
+  animation-duration: 0.5s;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .min-h-screen {
+    padding: 1rem;
+  }
+
+  .flex-col {
+    flex-direction: column;
+  }
+
+  .h-96 {
+    height: 250px;
+  }
+}
