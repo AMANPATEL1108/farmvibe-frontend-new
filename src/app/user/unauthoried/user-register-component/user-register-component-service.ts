@@ -22,7 +22,7 @@ export interface OtpVerificationRequest {
 })
 export class UserRegisterComponentService {
   BASE_URL = 'http://localhost:8080/auth';
-  TIMEOUT_DURATION = 10000; // 10 seconds timeout
+  TIMEOUT_DURATION = 10000;
 
   constructor(private http: HttpClient) {}
 
@@ -31,6 +31,7 @@ export class UserRegisterComponentService {
     const requestBody: SendOtpRequest = {
       username: phone,
     };
+    console.log('REq body', requestBody);
 
     return this.http
       .post(`${this.BASE_URL}/send-otp`, requestBody, {
