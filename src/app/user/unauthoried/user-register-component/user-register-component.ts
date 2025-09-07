@@ -9,8 +9,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { UserRegisterComponentService } from './user-register-component-service';
 import { RegisterDTO } from './RegisterDTO';
+import { UserRegisterComponentService } from './user-register-component-service';
 
 @Component({
   selector: 'app-user-register-component',

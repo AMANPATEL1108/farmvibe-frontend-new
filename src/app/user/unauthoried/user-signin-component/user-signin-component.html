@@ -9,45 +9,84 @@
     <h2 class="text-3xl font-bold text-green-700 mb-4 text-center">Welcome Back</h2>
     <p class="text-gray-600 text-center mb-6">Sign in to continue to Farm Vibe</p>
 
-    <!-- Login Form -->
-    <form class="space-y-4">
+    <!-- Global Error Message -->
+    <div *ngIf="errorMessage" class="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-sm">
+      {{ errorMessage }}
+    </div>
 
-      <!-- Mobile -->
-      <input
-        type="text"
-        placeholder="Phone Number"
-        class="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-      />
+    <!-- Login Form -->
+    <form [formGroup]="loginForm" class="space-y-4" (ngSubmit)="onSubmit()">
+
+      <!-- Mobile Number -->
+      <div>
+        <input
+          type="text"
+          formControlName="username"
+          placeholder="Phone Number"
+          class="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+          [class.border-red-500]="hasError('username', 'required') || hasError('username', 'pattern') || hasError('username', 'userNotFound')"
+        />
+        <div *ngIf="hasError('username', 'required')" class="text-red-500 text-sm mt-1">
+          Phone number is required
+        </div>
+        <div *ngIf="hasError('username', 'pattern')" class="text-red-500 text-sm mt-1">
+          Please enter a valid Indian phone number
+        </div>
+        <div *ngIf="hasError('username', 'userNotFound')" class="text-red-500 text-sm mt-1">
+          User not found
+        </div>
+      </div>
 
       <!-- Password -->
       <div class="relative">
         <input
-          type="password"
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="password"
           placeholder="Password"
           class="w-full border border-gray-300 rounded-md px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-green-500"
+          [class.border-red-500]="hasError('password', 'required') || hasError('password', 'minlength') || hasError('password', 'invalidCredentials')"
         />
-        <button type="button"
-                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-green-600 focus:outline-none"
-                aria-label="Toggle password visibility">
+        <button 
+          type="button"
+          (click)="togglePasswordVisibility()"
+          class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-green-600 focus:outline-none"
+          aria-label="Toggle password visibility"
+        >
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round"
+            <path *ngIf="!showPassword" stroke-linecap="round" stroke-linejoin="round"
                   d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            <path stroke-linecap="round" stroke-linejoin="round"
+            <path *ngIf="!showPassword" stroke-linecap="round" stroke-linejoin="round"
                   d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            <path *ngIf="showPassword" stroke-linecap="round" stroke-linejoin="round"
+                  d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
           </svg>
         </button>
+        <div *ngIf="hasError('password', 'required')" class="text-red-500 text-sm mt-1">
+          Password is required
+        </div>
+        <div *ngIf="hasError('password', 'minlength')" class="text-red-500 text-sm mt-1">
+          Password must be at least 6 characters
+        </div>
+        <div *ngIf="hasError('password', 'invalidCredentials')" class="text-red-500 text-sm mt-1">
+          Invalid username or password
+        </div>
       </div>
 
-      <!-- Submit -->
-      <button type="button" (click)="goTologinUser()"
-              class="w-full bg-green-600 text-white py-2 rounded-md font-semibold hover:bg-green-700 transition duration-300"  style="background-color: rgb(49, 180, 140); color: white; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 600;">
-        Login
+      <!-- Submit Button -->
+      <button 
+        type="submit" 
+        [disabled]="isLoading"
+        class="w-full bg-green-600 text-white py-2 rounded-md font-semibold hover:bg-green-700 transition duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+        style="background-color: rgb(49, 180, 140);"
+      >
+        <span *ngIf="!isLoading">Login</span>
+        <span *ngIf="isLoading">Logging in...</span>
       </button>
 
       <!-- Forgot password -->
       <div class="text-right text-sm">
-        <a (click)="goToForgotPassword()" class="hover:underline text-green-600">Forgot Password?</a>
+        <a (click)="goToForgotPassword()" class="hover:underline text-green-600 cursor-pointer">Forgot Password?</a>
       </div>
     </form>
 
