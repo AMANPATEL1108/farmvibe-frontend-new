@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserHeaderComponentService } from './user-header-component-service';
 
 @Component({
   selector: 'app-user-header-component',
@@ -11,7 +12,10 @@ import { Router } from '@angular/router';
 export class UserHeaderComponent {
   dropdownOpen = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    public headerService: UserHeaderComponentService
+  ) {}
 
   toggleDropdown() {
     this.dropdownOpen = !this.dropdownOpen;
@@ -26,10 +30,8 @@ export class UserHeaderComponent {
   }
 
   logout() {
-    localStorage.removeItem('jwtToken');
-    localStorage.removeItem('jwtIssuedAt');
-    localStorage.removeItem('userId');
-    this.router.navigate(['/']);
+    this.headerService.logout();
+    this.router.navigate(['/farmvibe/signin']);
   }
 
   goToHomePage() {

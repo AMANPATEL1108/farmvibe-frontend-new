@@ -18,36 +18,42 @@
         <a (click)="goToAboutPage()" class="hover:text-blue-300 transition px-2 py-1 no-underline">About</a>
       </nav>
 
-      <!-- Auth & Profile -->
-      <div class="flex items-center gap-4 relative">
-        
-        <!-- Always show Sign In & Register -->
-        <a (click)="goToSignInPage()"
-           class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-1.5 rounded shadow transition duration-200">
-          Sign In
-        </a>
-        <a (click)="goToRegisterPage()"
-           class="bg-green-500 hover:bg-green-600 text-white text-sm px-4 py-1.5 rounded shadow transition duration-200">
-          Register
-        </a>
+     <!-- Auth & Profile -->
+<div class="flex items-center gap-4 relative">
+  
+  <!-- Show Sign In & Register if NOT authenticated -->
+  <ng-container *ngIf="!(headerService.authState$ | async)">
+    <a (click)="goToSignInPage()"
+      class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-1.5 rounded shadow transition duration-200">
+      Sign In
+    </a>
+    <a (click)="goToRegisterPage()"
+      class="bg-green-500 hover:bg-green-600 text-white text-sm px-4 py-1.5 rounded shadow transition duration-200">
+      Register
+    </a>
+  </ng-container>
 
-        <!-- Always show Profile Icon & Dropdown -->
-        <div class="relative">
-          <button (click)="toggleDropdown()"
-                  class="focus:outline-none flex flex-col items-center"
-                  aria-haspopup="true" [attr.aria-expanded]="dropdownOpen">
-            <img src="/assets/user.png" alt="Profile" class="w-9 h-9 rounded-full border-2 border-white"/>
-            <p class="text-xs text-white text-center mt-1">User</p>
-          </button>
+  <!-- Show Profile Icon if authenticated -->
+  <ng-container *ngIf="headerService.authState$ | async">
+    <div class="relative">
+      <button (click)="toggleDropdown()"
+              class="focus:outline-none flex flex-col items-center"
+              aria-haspopup="true" [attr.aria-expanded]="dropdownOpen">
+        <img src="/assets/user.png" alt="Profile" class="w-9 h-9 rounded-full border-2 border-white"/>
+        <p class="text-xs text-white text-center mt-1">User</p>
+      </button>
 
-          <div *ngIf="dropdownOpen"
-               class="absolute right-0 mt-2 bg-white text-black rounded shadow-md z-50 min-w-[160px]">
-            <a (click)="goToProfile()" class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Profile</a>
-            <a (click)="goToOrders()" class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Orders</a>
-            <a (click)="logout()" class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Log Out</a>
-          </div>
-        </div>
+      <div *ngIf="dropdownOpen"
+          class="absolute right-0 mt-2 bg-white text-black rounded shadow-md z-50 min-w-[160px]">
+        <a (click)="goToProfile()" class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Profile</a>
+        <a (click)="goToOrders()" class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Orders</a>
+        <a (click)="logout()" class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Log Out</a>
       </div>
+    </div>
+  </ng-container>
+
+</div>
+
     </div>
   </div>
 </header>

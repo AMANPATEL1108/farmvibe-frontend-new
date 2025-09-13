@@ -234,19 +234,4 @@ export class UserRegisterComponent {
   }
 
   // Test method to check API connection
-  testApiConnection() {
-    console.log('Testing API connection...');
-    this.authService.sendOtp('9999999999').subscribe({
-      next: (response) => {
-        console.log('API test response:', response);
-        alert(
-          'API connection successful! Response: ' + JSON.stringify(response)
-        );
-      },
-      error: (error) => {
-        console.error('API test error:', error);
-        alert('API connection failed: ' + error);
-      },
-    });
-  }
 }
