@@ -4,8 +4,6 @@ import { Observable } from 'rxjs';
 import { LoginResponse } from './LoginResponse';
 import { LoginRequest } from './LoginRequest';
 
-
-
 @Injectable({
   providedIn: 'root',
 })
@@ -34,14 +32,8 @@ export class UserSigninComponentService {
     return localStorage.getItem('authToken');
   }
 
-  // Method to get stored username
-  getUsername(): string | null {
-    return localStorage.getItem('username');
-  }
-
   // Method to logout
   logout(): void {
     localStorage.removeItem('authToken');
-    localStorage.removeItem('username');
   }
 }

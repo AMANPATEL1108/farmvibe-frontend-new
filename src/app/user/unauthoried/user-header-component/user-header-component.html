@@ -11,45 +11,53 @@
 
       <!-- Navigation -->
       <nav class="flex gap-4 mb-2 md:mb-0">
-        <a (click)="goToHomePage()" class="hover:text-blue-300 transition px-2 py-1 no-underline">Home</a>
-        <a (click)="goToContactPage()" class="hover:text-blue-300 transition px-2 py-1 no-underline">Contact</a>
-        <a (click)="goToProductPage()" class="hover:text-blue-300 transition px-2 py-1 no-underline">Products</a>
-        <a (click)="goToCategoryPage()" class="hover:text-blue-300 transition px-2 py-1 no-underline">Category</a>
-        <a (click)="goToAboutPage()" class="hover:text-blue-300 transition px-2 py-1 no-underline">About</a>
+        <a (click)="goToHomePage()" class="hover:text-blue-300 transition px-2 py-1 no-underline cursor-pointer">Home</a>
+        <a (click)="goToContactPage()" class="hover:text-blue-300 transition px-2 py-1 no-underline cursor-pointer">Contact</a>
+        <a (click)="goToProductPage()" class="hover:text-blue-300 transition px-2 py-1 no-underline cursor-pointer">Products</a>
+        <a (click)="goToCategoryPage()" class="hover:text-blue-300 transition px-2 py-1 no-underline cursor-pointer">Category</a>
+        <a (click)="goToAboutPage()" class="hover:text-blue-300 transition px-2 py-1 no-underline cursor-pointer">About</a>
       </nav>
 
      <!-- Auth & Profile -->
 <div class="flex items-center gap-4 relative">
   
-  <!-- Show Sign In & Register if NOT authenticated -->
-  <ng-container *ngIf="!(headerService.authState$ | async)">
-    <a (click)="goToSignInPage()"
-      class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-1.5 rounded shadow transition duration-200">
-      Sign In
-    </a>
-    <a (click)="goToRegisterPage()"
-      class="bg-green-500 hover:bg-green-600 text-white text-sm px-4 py-1.5 rounded shadow transition duration-200">
-      Register
-    </a>
+  <!-- Show loading state while checking authentication -->
+  <ng-container *ngIf="!(headerService.initialCheckComplete$ | async)">
+    <div class="text-sm">Checking authentication...</div>
   </ng-container>
 
-  <!-- Show Profile Icon if authenticated -->
-  <ng-container *ngIf="headerService.authState$ | async">
-    <div class="relative">
-      <button (click)="toggleDropdown()"
-              class="focus:outline-none flex flex-col items-center"
-              aria-haspopup="true" [attr.aria-expanded]="dropdownOpen">
-        <img src="/assets/user.png" alt="Profile" class="w-9 h-9 rounded-full border-2 border-white"/>
-        <p class="text-xs text-white text-center mt-1">User</p>
-      </button>
+  <!-- Show content after initial check is complete -->
+  <ng-container *ngIf="headerService.initialCheckComplete$ | async">
+    <!-- Show Sign In & Register if NOT authenticated -->
+    <ng-container *ngIf="!(headerService.authState$ | async)">
+      <a (click)="goToSignInPage()"
+        class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-1.5 rounded shadow transition duration-200 cursor-pointer">
+        Sign In
+      </a>
+      <a (click)="goToRegisterPage()"
+        class="bg-green-500 hover:bg-green-600 text-white text-sm px-4 py-1.5 rounded shadow transition duration-200 cursor-pointer">
+        Register
+      </a>
+    </ng-container>
 
-      <div *ngIf="dropdownOpen"
-          class="absolute right-0 mt-2 bg-white text-black rounded shadow-md z-50 min-w-[160px]">
-        <a (click)="goToProfile()" class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Profile</a>
-        <a (click)="goToOrders()" class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Orders</a>
-        <a (click)="logout()" class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Log Out</a>
+    <!-- Show Profile Icon if authenticated -->
+    <ng-container *ngIf="headerService.authState$ | async">
+      <div class="relative">
+        <button (click)="toggleDropdown()"
+                class="focus:outline-none flex flex-col items-center"
+                aria-haspopup="true" [attr.aria-expanded]="dropdownOpen">
+          <img src="/assets/user.png" alt="Profile" class="w-9 h-9 rounded-full border-2 border-white"/>
+          <p class="text-xs text-white text-center mt-1">User</p>
+        </button>
+
+        <div *ngIf="dropdownOpen"
+            class="absolute right-0 mt-2 bg-white text-black rounded shadow-md z-50 min-w-[160px]">
+          <a (click)="goToProfile()" class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Profile</a>
+          <a (click)="goToOrders()" class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Orders</a>
+          <a (click)="logout()" class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Log Out</a>
+        </div>
       </div>
-    </div>
+    </ng-container>
   </ng-container>
 
 </div>

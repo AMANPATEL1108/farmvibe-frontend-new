@@ -9,6 +9,13 @@ import { UserHeaderComponentService } from './user/unauthoried/user-header-compo
   templateUrl: './app.html',
   styleUrls: ['./app.css'],
 })
-export class App {
+export class App implements OnInit {
   protected title = 'farmvibe-frontend-new';
+
+  constructor(private headerService: UserHeaderComponentService) {}
+
+  ngOnInit() {
+    // Ensure authentication is checked on app initialization
+    this.headerService.checkTokenOnStart();
+  }
 }

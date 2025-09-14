@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserHeaderComponentService } from './user-header-component-service';
 
@@ -9,13 +9,22 @@ import { UserHeaderComponentService } from './user-header-component-service';
   templateUrl: './user-header-component.html',
   styleUrls: ['./user-header-component.css'],
 })
-export class UserHeaderComponent {
+export class UserHeaderComponent implements OnInit {
   dropdownOpen = false;
 
   constructor(
     private router: Router,
     public headerService: UserHeaderComponentService
   ) {}
+
+  ngOnInit() {
+    // If we already have a token but the initial check hasn't completed yet,
+    // trigger verification immediately (this handles page refreshes)
+    const token = localStorage.getItem('authToken');
+    if (token && !this.headerService.isInitialCheckComplete()) {
+      this.headerService.verifyToken(token);
+    }
+  }
 
   toggleDropdown() {
     this.dropdownOpen = !this.dropdownOpen;
