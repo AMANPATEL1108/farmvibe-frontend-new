@@ -1,7 +1,7 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpBackend } from '@angular/common/http';
 import { TokenVerificationRequest } from '../../../Verification-model/token-verification-request.model';
 import { TokenVerificationResponse } from '../../../Verification-model/token-verification-response.model';
 
@@ -19,10 +19,13 @@ export class UserHeaderComponentService {
 
   private isVerifying = false;
 
+  private httpBypass: HttpClient; // HttpClient without interceptors
+
   constructor(
-    private http: HttpClient,
+    handler: HttpBackend, // Inject HttpBackend instead of HttpClient
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
+    this.httpBypass = new HttpClient(handler); // Create HttpClient that skips interceptors
     this.checkTokenOnStart();
   }
 
@@ -47,31 +50,29 @@ export class UserHeaderComponentService {
     this.isVerifying = true;
     const payload: TokenVerificationRequest = { token };
 
-    this.http.post<TokenVerificationResponse>(this.apiUrl, payload).subscribe({
-      next: (res) => {
-        this.isVerifying = false;
-        if (res.success) {
-          this.setAuthState(true);
-        } else {
-          // Only logout if token is explicitly invalid
-          console.warn('Token verification failed:', res.message);
-          this.logout();
-        }
-        this.initialCheckComplete.next(true);
-      },
-      error: (error) => {
-        this.isVerifying = false;
-        console.error('Token verification error:', error);
-
-        // Don't logout on network errors, only on explicit 401 responses
-        // Keep the token but mark as not authenticated temporarily
-        this.setAuthState(false);
-        this.initialCheckComplete.next(true);
-      },
-    });
+    // Use httpBypass so interceptors are skipped here
+    this.httpBypass
+      .post<TokenVerificationResponse>(this.apiUrl, payload)
+      .subscribe({
+        next: (res) => {
+          this.isVerifying = false;
+          if (res.success) {
+            this.setAuthState(true);
+          } else {
+            console.warn('Token verification failed:', res.message);
+            this.logout();
+          }
+          this.initialCheckComplete.next(true);
+        },
+        error: (error) => {
+          this.isVerifying = false;
+          console.error('Token verification error:', error);
+          this.setAuthState(false);
+          this.initialCheckComplete.next(true);
+        },
+      });
   }
 
-  // Add this method to manually set authentication after successful login
   setAuthentication(token: string) {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('authToken', token);
@@ -80,7 +81,6 @@ export class UserHeaderComponentService {
     this.initialCheckComplete.next(true);
   }
 
-  // Add this method to check if initial check is complete
   isInitialCheckComplete(): boolean {
     return this.initialCheckComplete.getValue();
   }
@@ -96,7 +96,6 @@ export class UserHeaderComponentService {
     this.setAuthState(false);
   }
 
-  // Helper method to get current auth state
   getAuthState(): boolean {
     return this.authState.getValue();
   }

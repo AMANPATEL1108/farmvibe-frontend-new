@@ -1,24 +1,24 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { UserProfileDetailsService } from './user-profile-details-service';
 
 @Component({
   selector: 'app-user-profile-details-component',
   standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './user-profile-details-component.html',
-  styleUrl: './user-profile-details-component.css',
+  styleUrls: ['./user-profile-details-component.css'],
 })
-export class UserProfileDetailsComponent {
-  /** ===================== Data ===================== */
+export class UserProfileDetailsComponent implements OnInit {
   profileImage = '/images/sample-profile.jpg';
   previewImage: string | ArrayBuffer | null = null;
 
   user = {
-    firstName: 'Aman',
-    lastName: 'Patel',
-    email: 'aman@example.com',
-    phone: '9876543210',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
   };
 
   addresses = [
@@ -63,11 +63,33 @@ export class UserProfileDetailsComponent {
   enteredOtp: string = '';
   pendingAction: 'profile' | 'address-edit' | 'address-delete' | null = null;
 
-  /** ===================== Profile ===================== */
+  constructor(private userProfileService: UserProfileDetailsService) {}
+
+  ngOnInit(): void {
+    this.loadUserProfile();
+  }
+
+  /** ===================== Load Profile ===================== */
+  loadUserProfile() {
+    this.userProfileService.getProfile().subscribe({
+      next: (res) => {
+        console.log('Profile:', res);
+        this.user.firstName = res.user_firstName;
+        this.user.lastName = res.user_lastName;
+        this.user.email = res.user_email;
+        this.user.phone = res.username; // use username as phone
+        this.profileImage = res.profileImageUrl || this.profileImage;
+      },
+      error: (err) => {
+        console.error('Error loading profile:', err);
+      },
+    });
+  }
+
+  /** ===================== Profile Modals ===================== */
   openEditDetailsModal() {
     this.editDetailsModal = true;
   }
-
   closeEditDetailsModal() {
     this.editDetailsModal = false;
   }
@@ -80,12 +102,10 @@ export class UserProfileDetailsComponent {
     this.closeEditDetailsModal();
   }
 
-  /** ===================== Profile Image ===================== */
   openImageUpload() {
     this.previewImage = null;
     this.imageUploadModal = true;
   }
-
   closeImageUpload() {
     this.imageUploadModal = false;
   }
@@ -119,7 +139,6 @@ export class UserProfileDetailsComponent {
     this.selectedAddress = { ...addr };
     this.addressEditModal = true;
   }
-
   closeAddressEditModal() {
     this.addressEditModal = false;
   }
