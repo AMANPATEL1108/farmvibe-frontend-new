@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import {
   HttpInterceptor,
   HttpRequest,
@@ -9,13 +9,15 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
 import { UserHeaderComponentService } from '../user/unauthoried/user-header-component/user-header-component-service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(
     private router: Router,
-    private headerService: UserHeaderComponentService
+    private headerService: UserHeaderComponentService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   intercept(
@@ -27,7 +29,11 @@ export class AuthInterceptor implements HttpInterceptor {
       return next.handle(req);
     }
 
-    const token = localStorage.getItem('authToken');
+    // Only access localStorage in browser environment
+    let token: string | null = null;
+    if (isPlatformBrowser(this.platformId)) {
+      token = localStorage.getItem('authToken');
+    }
 
     if (!token) {
       return next.handle(req);
