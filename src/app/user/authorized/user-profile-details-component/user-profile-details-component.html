@@ -51,6 +51,9 @@
     <!-- Right Panel: Addresses -->
     <div class="bg-white p-6 rounded-lg shadow-lg">
       <h2 class="text-xl font-semibold mb-4">Saved Addresses</h2>
+      <div *ngIf="addresses.length === 0" class="text-center py-4 text-gray-500">
+        No addresses found. Add your first address.
+      </div>
       <div class="space-y-3" *ngFor="let addr of addresses; let i = index">
         <div class="flex items-start justify-between border p-3 rounded bg-gray-50">
           <div class="text-sm">
@@ -64,7 +67,7 @@
           <div class="space-x-2">
             <button (click)="openAddressEditModal(addr)"
               class="text-sm bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">Edit</button>
-            <button (click)="confirmDeleteAddress(addr.id)"
+            <button (click)="confirmDeleteAddress(addr.address_id)"
               class="text-sm bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">Delete</button>
           </div>
         </div>
@@ -103,7 +106,15 @@
   <div class="bg-white p-6 rounded-lg shadow-lg w-96">
     <h2 class="text-lg font-semibold mb-4">Edit Address</h2>
     <form class="space-y-2">
-      <input type="text" [(ngModel)]="selectedAddress.house_number" name="house"
+      <input type="text" [(ngModel)]="selectedAddress.first_name" name="first_name"
+        class="w-full border p-2 rounded" placeholder="First Name">
+      <input type="text" [(ngModel)]="selectedAddress.last_name" name="last_name"
+        class="w-full border p-2 rounded" placeholder="Last Name">
+      <input type="email" [(ngModel)]="selectedAddress.email" name="email"
+        class="w-full border p-2 rounded" placeholder="Email">
+      <input type="text" [(ngModel)]="selectedAddress.number" name="number"
+        class="w-full border p-2 rounded" placeholder="Phone Number">
+      <input type="text" [(ngModel)]="selectedAddress.house_number" name="house_number"
         class="w-full border p-2 rounded" placeholder="House No">
       <input type="text" [(ngModel)]="selectedAddress.street" name="street"
         class="w-full border p-2 rounded" placeholder="Street">
@@ -125,10 +136,19 @@
   </div>
 </div>
 
+<!-- Keep all your existing HTML, but update the OTP modal section: -->
+
 <!-- ===================== OTP Modal ===================== -->
 <div *ngIf="otpModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
   <div class="bg-white p-6 rounded-lg shadow-lg w-96">
     <h2 class="text-lg font-semibold mb-4">Verify OTP</h2>
+    
+    <!-- Development Mode Warning -->
+    <div *ngIf="isDevelopmentMode" class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4">
+      <p class="text-sm font-medium">Development Mode</p>
+      <p class="text-sm">SMS service is offline. Check backend console for OTP code.</p>
+    </div>
+    
     <p class="text-sm text-gray-600 mb-3">We've sent a 6-digit OTP to your registered phone number.</p>
     <input type="text" maxlength="6" [(ngModel)]="enteredOtp"
       class="w-full border border-gray-300 rounded-md p-2 text-center tracking-widest text-lg"
@@ -148,53 +168,6 @@
               [disabled]="isVerifyingOtp || !enteredOtp || enteredOtp.length !== 6"
               class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:bg-green-400 disabled:cursor-not-allowed">
         {{isVerifyingOtp ? 'Verifying...' : 'Verify & Continue'}}
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- Keep your existing Address Edit Modal and other modals as they are -->
-
-<!-- ===================== Address Edit Modal ===================== -->
-<div *ngIf="addressEditModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-    <h2 class="text-lg font-semibold mb-4">Edit Address</h2>
-    <form class="space-y-2">
-      <input type="text" [(ngModel)]="selectedAddress.house_number" name="house"
-        class="w-full border p-2 rounded" placeholder="House No">
-      <input type="text" [(ngModel)]="selectedAddress.street" name="street"
-        class="w-full border p-2 rounded" placeholder="Street">
-      <input type="text" [(ngModel)]="selectedAddress.area" name="area"
-        class="w-full border p-2 rounded" placeholder="Area">
-      <input type="text" [(ngModel)]="selectedAddress.city" name="city"
-        class="w-full border p-2 rounded" placeholder="City">
-      <input type="text" [(ngModel)]="selectedAddress.pincode" name="pincode"
-        class="w-full border p-2 rounded" placeholder="Pincode">
-    </form>
-    <div class="flex justify-end space-x-2 mt-4">
-      <button (click)="closeAddressEditModal()" class="px-3 py-1 bg-gray-400 text-white rounded">Cancel</button>
-      <button (click)="saveEditedAddressWithOtp()" class="px-3 py-1 bg-blue-600 text-white rounded">Save</button>
-    </div>
-  </div>
-</div>
-
-<!-- ===================== OTP Modal ===================== -->
-<div *ngIf="otpModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-    <h2 class="text-lg font-semibold mb-4">Verify OTP</h2>
-    <p class="text-sm text-gray-600 mb-3">We’ve sent a 6-digit OTP to your registered phone number.</p>
-    <input type="text" maxlength="6" [(ngModel)]="enteredOtp"
-      class="w-full border border-gray-300 rounded-md p-2 text-center tracking-widest text-lg"
-      placeholder="Enter OTP">
-
-    <div class="flex justify-between items-center mt-3">
-      <button (click)="resendOtp()" class="text-blue-600 text-sm hover:underline">Resend OTP</button>
-      <button (click)="closeOtpModal()" class="text-gray-500 text-sm hover:underline">Cancel</button>
-    </div>
-
-    <div class="flex justify-end mt-4 space-x-2">
-      <button (click)="verifyOtp()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-        Verify & Continue
       </button>
     </div>
   </div>

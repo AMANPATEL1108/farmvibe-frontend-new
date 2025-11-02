@@ -26,32 +26,8 @@ export class UserProfileDetailsComponent implements OnInit {
     phone: '',
   };
 
-  addresses = [
-    {
-      id: 1,
-      first_name: 'Aman',
-      last_name: 'Patel',
-      email: 'aman@example.com',
-      number: '9876543210',
-      house_number: '123',
-      street: 'Main Street',
-      area: 'Sector 5',
-      city: 'Ahmedabad',
-      pincode: '380001',
-    },
-    {
-      id: 2,
-      first_name: 'Aman',
-      last_name: 'Patel',
-      email: 'aman@example.com',
-      number: '9876543210',
-      house_number: '456',
-      street: 'MG Road',
-      area: 'Satellite',
-      city: 'Ahmedabad',
-      pincode: '380015',
-    },
-  ];
+  addresses: any[] = [];
+  userId: number | null = null;
 
   /** ===================== Modal States ===================== */
   editDetailsModal = false;
@@ -71,9 +47,13 @@ export class UserProfileDetailsComponent implements OnInit {
 
   // Store pending user data for update after OTP verification
   pendingUserUpdate: any = null;
+  pendingAddressUpdate: any = null;
 
   // Track if form has changes
   hasFormChanges: boolean = false;
+
+  // Development mode flag
+  isDevelopmentMode: boolean = true;
 
   constructor(
     private userProfileService: UserProfileDetailsService,
@@ -90,11 +70,15 @@ export class UserProfileDetailsComponent implements OnInit {
       next: (res) => {
         console.log('Profile:', res);
         this.originalUser = { ...res };
+        this.userId = res.user_id;
         this.user.firstName = res.user_firstName;
         this.user.lastName = res.user_lastName;
         this.user.email = res.user_email;
         this.user.phone = res.username;
         this.profileImage = res.profileImageUrl || this.profileImage;
+
+        // Load addresses after profile is loaded
+        this.loadAddresses();
         this.toastr.success('Profile loaded successfully');
       },
       error: (err) => {
@@ -102,6 +86,30 @@ export class UserProfileDetailsComponent implements OnInit {
         this.toastr.error('Failed to load profile. Please try again.');
       },
     });
+  }
+
+  /** ===================== Load Addresses ===================== */
+  loadAddresses() {
+    if (this.userId) {
+      this.userProfileService.getAddressesByUserId(this.userId).subscribe({
+        next: (res: any) => {
+          console.log('Addresses:', res);
+          if (Array.isArray(res)) {
+            this.addresses = res;
+          } else if (res.message) {
+            this.addresses = [];
+            this.toastr.info(res.message);
+          } else {
+            this.addresses = [];
+          }
+        },
+        error: (err) => {
+          console.error('Error loading addresses:', err);
+          this.toastr.error('Failed to load addresses. Please try again.');
+          this.addresses = [];
+        },
+      });
+    }
   }
 
   /** ===================== Profile Modals ===================== */
@@ -180,10 +188,27 @@ export class UserProfileDetailsComponent implements OnInit {
           this.toastr.error(response.message || 'Failed to send OTP');
         }
       },
-      error: (error) => {
+      error: (error: any) => {
         this.isSendingOtp = false;
         console.error('Error sending OTP:', error);
-        this.toastr.error('Failed to send OTP. Please try again.');
+
+        // Check if it's a development mode error (SMS failed but OTP generated)
+        if (
+          error.message?.includes('Check backend logs for OTP') ||
+          error.message?.includes('SMS delivery failed')
+        ) {
+          this.isDevelopmentMode = true;
+          this.otpModal = true;
+          this.toastr.warning(
+            'Development Mode: OTP generated. Check backend console for OTP code.'
+          );
+          this.closeEditDetailsModal();
+          this.closeAddressEditModal();
+        } else {
+          this.toastr.error(
+            error.message || 'Failed to send OTP. Please try again.'
+          );
+        }
       },
     });
   }
@@ -210,10 +235,12 @@ export class UserProfileDetailsComponent implements OnInit {
             );
           }
         },
-        error: (error) => {
+        error: (error: any) => {
           this.isVerifyingOtp = false;
           console.error('Error verifying OTP:', error);
-          this.toastr.error('OTP verification failed. Please try again.');
+          this.toastr.error(
+            error.message || 'OTP verification failed. Please try again.'
+          );
         },
       });
   }
@@ -241,14 +268,148 @@ export class UserProfileDetailsComponent implements OnInit {
         this.toastr.success('Profile updated successfully');
         this.resetOtpFlow();
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error updating profile:', error);
-        this.toastr.error('Failed to update profile. Please try again.');
+        this.toastr.error(
+          error.message || 'Failed to update profile. Please try again.'
+        );
         this.resetOtpFlow();
       },
     });
   }
 
+  /** ===================== Address Edit ===================== */
+  openAddressEditModal(addr: any) {
+    this.selectedAddress = { ...addr };
+    this.addressEditModal = true;
+  }
+
+  closeAddressEditModal() {
+    this.addressEditModal = false;
+    this.selectedAddress = null;
+  }
+
+  saveEditedAddressWithOtp() {
+    if (
+      !this.selectedAddress.house_number ||
+      !this.selectedAddress.street ||
+      !this.selectedAddress.area ||
+      !this.selectedAddress.city ||
+      !this.selectedAddress.pincode
+    ) {
+      this.toastr.warning('Please fill all address fields');
+      return;
+    }
+
+    this.pendingAddressUpdate = { ...this.selectedAddress };
+    this.pendingAction = 'address-edit';
+    this.sendOtpForVerification();
+  }
+
+  updateAddress() {
+    this.userProfileService
+      .updateAddress(
+        this.pendingAddressUpdate.address_id,
+        this.pendingAddressUpdate
+      )
+      .subscribe({
+        next: (response: any) => {
+          console.log('Address updated successfully:', response);
+          this.loadAddresses(); // Reload addresses to get updated data
+          this.toastr.success('Address updated successfully');
+          this.resetOtpFlow();
+        },
+        error: (error: any) => {
+          console.error('Error updating address:', error);
+          this.toastr.error(
+            error.message || 'Failed to update address. Please try again.'
+          );
+          this.resetOtpFlow();
+        },
+      });
+  }
+
+  /** ===================== Address Delete ===================== */
+  confirmDeleteAddress(addressId: number) {
+    if (confirm('Are you sure you want to delete this address?')) {
+      this.addressToDelete = addressId;
+      this.pendingAction = 'address-delete';
+      this.sendOtpForVerification();
+    }
+  }
+
+  deleteAddress() {
+    if (this.addressToDelete) {
+      this.userProfileService.deleteAddress(this.addressToDelete).subscribe({
+        next: (response: any) => {
+          console.log('Address deleted successfully:', response);
+          this.loadAddresses(); // Reload addresses to reflect deletion
+          this.toastr.success('Address deleted successfully');
+          this.resetOtpFlow();
+        },
+        error: (error: any) => {
+          console.error('Error deleting address:', error);
+          this.toastr.error(
+            error.message || 'Failed to delete address. Please try again.'
+          );
+          this.resetOtpFlow();
+        },
+      });
+    }
+  }
+
+  /** ===================== OTP Actions ===================== */
+  resendOtp() {
+    this.isSendingOtp = true;
+    this.userProfileService.sendOtp(this.user.phone).subscribe({
+      next: (response: any) => {
+        this.isSendingOtp = false;
+        if (response.success) {
+          this.toastr.success('OTP resent successfully');
+        } else {
+          this.toastr.error(response.message || 'Failed to resend OTP');
+        }
+      },
+      error: (error: any) => {
+        this.isSendingOtp = false;
+        console.error('Error resending OTP:', error);
+
+        if (
+          error.message?.includes('Check backend logs for OTP') ||
+          error.message?.includes('SMS delivery failed')
+        ) {
+          this.toastr.warning(
+            'Development Mode: New OTP generated. Check backend console.'
+          );
+        } else {
+          this.toastr.error(
+            error.message || 'Failed to resend OTP. Please try again.'
+          );
+        }
+      },
+    });
+  }
+
+  closeOtpModal() {
+    this.toastr.info('OTP verification cancelled');
+    this.resetOtpFlow();
+  }
+
+  private resetOtpFlow() {
+    this.otpModal = false;
+    this.enteredOtp = '';
+    this.pendingAction = null;
+    this.pendingUserUpdate = null;
+    this.pendingAddressUpdate = null;
+    this.isSendingOtp = false;
+    this.isVerifyingOtp = false;
+    this.hasFormChanges = false;
+    this.addressEditModal = false;
+    this.addressToDelete = null;
+    this.isDevelopmentMode = false;
+  }
+
+  // Image handling methods (keep your existing methods)
   openImageUpload() {
     this.previewImage = null;
     this.imageUploadModal = true;
@@ -282,83 +443,5 @@ export class UserProfileDetailsComponent implements OnInit {
       this.profileImage = '/images/sample-profile.jpg';
       this.toastr.info('Profile image removed');
     }
-  }
-
-  /** ===================== Address Edit ===================== */
-  openAddressEditModal(addr: any) {
-    this.selectedAddress = { ...addr };
-    this.addressEditModal = true;
-  }
-
-  closeAddressEditModal() {
-    this.addressEditModal = false;
-  }
-
-  saveEditedAddressWithOtp() {
-    if (
-      !this.selectedAddress.house_number ||
-      !this.selectedAddress.street ||
-      !this.selectedAddress.area ||
-      !this.selectedAddress.city ||
-      !this.selectedAddress.pincode
-    ) {
-      this.toastr.warning('Please fill all address fields');
-      return;
-    }
-
-    this.pendingAction = 'address-edit';
-    this.sendOtpForVerification();
-  }
-
-  updateAddress() {
-    const index = this.addresses.findIndex(
-      (a) => a.id === this.selectedAddress.id
-    );
-    if (index !== -1) {
-      this.addresses[index] = this.selectedAddress;
-      this.toastr.success('Address updated successfully');
-    } else {
-      this.toastr.error('Failed to update address');
-    }
-
-    this.resetOtpFlow();
-  }
-
-  /** ===================== Address Delete ===================== */
-  confirmDeleteAddress(id: number) {
-    this.addressToDelete = id;
-    this.pendingAction = 'address-delete';
-    this.sendOtpForVerification();
-  }
-
-  deleteAddress() {
-    this.addresses = this.addresses.filter(
-      (a) => a.id !== this.addressToDelete
-    );
-
-    this.toastr.success('Address deleted successfully');
-    this.resetOtpFlow();
-  }
-
-  /** ===================== OTP Actions ===================== */
-  resendOtp() {
-    this.toastr.info('Resending OTP...');
-    this.sendOtpForVerification();
-  }
-
-  closeOtpModal() {
-    this.toastr.info('OTP verification cancelled');
-    this.resetOtpFlow();
-  }
-
-  private resetOtpFlow() {
-    this.otpModal = false;
-    this.enteredOtp = '';
-    this.pendingAction = null;
-    this.pendingUserUpdate = null;
-    this.isSendingOtp = false;
-    this.isVerifyingOtp = false;
-    this.hasFormChanges = false;
-    this.addressEditModal = false;
   }
 }
