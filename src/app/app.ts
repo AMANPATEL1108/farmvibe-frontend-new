@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { UserHeaderComponentService } from './user/unauthoried/user-header-component/user-header-component-service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, HttpClientModule],
   templateUrl: './app.html',
   styleUrls: ['./app.css'],
 })

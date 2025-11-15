@@ -1,36 +1,82 @@
-<section class="text-center mb-12 animate__animated animate__fadeInDown mt-5">
-  <h2 class="text-4xl font-bold text-green-800 mb-2">Our Products</h2>
-  <p class="text-gray-600 text-base max-w-2xl mx-auto">
-    We offer a variety of organic farm products with premium quality.
-  </p>
-</section>
+<div class="container mx-auto px-4 py-8">
+  <!-- Header Section -->
+  <section class="text-center mb-12 mt-5">
+    <h2 class="text-4xl font-bold text-green-800 mb-2">Our Products</h2>
+    <p class="text-gray-600 text-base max-w-2xl mx-auto">
+      We offer a variety of organic farm products with premium quality.
+    </p>
+  </section>
 
-<!-- Products Grid -->
-<div
-  class="max-w-7xl mb-10 mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 animate__animated animate__fadeInUp"
->
-  <div
-    *ngFor="let product of products"
-    class="bg-white rounded-xl shadow-md p-4 flex flex-col hover:shadow-lg transition-shadow duration-300"
-  >
-    <!-- Relative link to child route -->
-    <a  (click)="goToProductDetailsPage()"  class="block overflow-hidden rounded-lg hover-zoom no-underline">
-      <img [src]="product.imageUrl" [alt]="product.name" class="w-full h-48 object-cover" />
-    </a>
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="text-center py-12">
+    <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+    <p class="mt-4 text-gray-600">Loading products...</p>
+  </div>
 
+  <!-- Error State -->
+  <div *ngIf="error && !isLoading" class="text-center py-12">
+    <p class="text-red-600 mb-4">{{ error }}</p>
+    <button 
+      (click)="loadProducts()" 
+      class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
+    >
+      Retry
+    </button>
+  </div>
 
-    <div class="mt-4 flex flex-col flex-grow">
-      <a  (click)="goToProductDetailsPage()"    class="text-lg font-semibold text-green-800 no-underline hover:text-green-600">
-        {{ product.name }}
-      </a>
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && !error && products.length === 0" class="text-center py-12">
+    <p class="text-gray-600">No products available at the moment.</p>
+  </div>
 
-      <p class="text-gray-700 text-sm mt-1 line-clamp-2">{{ product.description }}</p>
-      <div class="mt-auto flex items-center justify-between mt-4">
-        <span class="text-xl font-bold text-red-600">₹{{ product.price }} / {{ product.weight }}</span>
-        <span class="text-sm" [ngClass]="product.stock ? 'text-green-600' : 'text-red-600'">
-          {{ product.stock ? 'In Stock' : 'Out of Stock' }}
-        </span>
+  <!-- Products Grid -->
+  <ng-container *ngIf="!isLoading && products.length > 0">
+    <div class="max-w-7xl mb-10 mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      <div 
+        *ngFor="let product of products; trackBy: trackByProductId"
+        class="bg-white rounded-xl shadow-md p-4 flex flex-col hover:shadow-lg transition-shadow duration-300"
+      >
+        <!-- Product Image -->
+        <div 
+          (click)="goToProductDetailsPage(product.id)" 
+          class="block overflow-hidden rounded-lg cursor-pointer bg-gray-100"
+        >
+          <img 
+            [src]="staticImageUrl" 
+            [alt]="product.name" 
+            class="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
+            (error)="handleImageError($event)"
+          />
+        </div>
+
+        <div class="mt-4 flex flex-col flex-grow">
+          <!-- Product Name -->
+          <div 
+            (click)="goToProductDetailsPage(product.id)" 
+            class="text-lg font-semibold text-green-800 hover:text-green-600 cursor-pointer"
+          >
+            {{ product.name }}
+          </div>
+
+          <!-- Product Description -->
+          <p class="text-gray-700 text-sm mt-1 line-clamp-2">
+            {{ product.description }}
+          </p>
+          
+          <!-- Price and Stock -->
+          <div class="mt-auto flex items-center justify-between mt-4">
+            <span class="text-xl font-bold text-red-600">
+              ₹{{ product.price }} / {{ product.weight }}
+            </span>
+            <span 
+              class="text-sm font-medium px-2 py-1 rounded" 
+              [ngClass]="product.stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
+            >
+              {{ product.stock > 0 ? 'In Stock' : 'Out of Stock' }}
+            </span>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+  </ng-container>
 </div>

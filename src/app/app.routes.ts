@@ -113,7 +113,7 @@ export const routes: Routes = [
       { path: 'contact', component: UserContactComponent },
       { path: 'products', component: UserProductsComponent },
       {
-        path: 'products/product-details',
+        path: 'products/product-details/:id',
         component: UserProductDetailsComponent,
       },
       { path: 'products/address', component: UserAddressDetailComponent },
