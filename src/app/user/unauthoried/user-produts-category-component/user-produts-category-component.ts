@@ -1,43 +1,76 @@
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { CategoryService, Category } from './category.service';
 
 @Component({
-  selector: 'app-user-produts-category-component',
+  selector: 'app-user-products-category',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './user-produts-category-component.html',
-  styleUrl: './user-produts-category-component.css',
+  styleUrls: ['./user-produts-category-component.css'],
 })
-export class UserProdutsCategoryComponent {
-  constructor(private router: Router) {}
+export class UserProdutsCategoryComponent implements OnInit {
+  categories: Category[] = [];
+  isLoading: boolean = true;
+  error: string | null = null;
+  private baseUrl = 'http://localhost:8080'; // Backend base URL
 
-  // ✅ Input properties (data comes from parent / API)
+  constructor(private categoryService: CategoryService) {}
 
-  categoryName: string = 'Vegetables';
+  ngOnInit(): void {
+    this.loadCategories();
+  }
 
-  products = [
-    {
-      id: 1,
-      name: 'Fresh Tomatoes',
-      description: 'Juicy red tomatoes grown organically.',
-      price: 40,
-      weight: 'kg',
-      stock: 10,
-      imageUrl: 'https://via.placeholder.com/300x200.png?text=Tomatoes',
-    },
-    {
-      id: 2,
-      name: 'Green Cucumbers',
-      description: 'Crisp and refreshing cucumbers.',
-      price: 30,
-      weight: 'kg',
-      stock: 0,
-      imageUrl: 'https://via.placeholder.com/300x200.png?text=Cucumbers',
-    },
-  ];
+  loadCategories(): void {
+    this.isLoading = true;
+    this.error = null;
 
-  goToProductDetailsPage() {
-    this.router.navigate(['/farmvibe/products/product-details']);
+    this.categoryService.getAllCategories().subscribe({
+      next: (data) => {
+        console.log('Categories received from API:', data);
+        console.log('Number of categories:', data.length);
+        this.categories = data;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.error = 'Failed to load categories. Please try again later.';
+        this.isLoading = false;
+        console.error('Error loading categories:', error);
+      },
+    });
+  }
+
+  /**
+   * Get the full image URL from the backend
+   */
+  getImageUrl(imageUrl: string): string {
+    if (!imageUrl) {
+      return 'assets/images/placeholder.jpg'; // Fallback image
+    }
+
+    // If the URL is already absolute, return as is
+    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+      return imageUrl;
+    }
+
+    // Remove leading slash if present and construct full URL
+    const cleanPath = imageUrl.startsWith('/')
+      ? imageUrl.substring(1)
+      : imageUrl;
+    return `${this.baseUrl}/${cleanPath}`;
+  }
+
+  /**
+   * Handle image load errors
+   */
+  onImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    img.src = 'assets/images/placeholder.jpg'; // Use a placeholder image
+    console.warn('Failed to load image, using placeholder');
+  }
+
+  goToProductDetailsPage(): void {
+    // Your existing implementation
   }
 }
