@@ -1,39 +1,56 @@
 <!-- Section Heading -->
-<section class="text-center mb-12 animate__animated animate__fadeInDown mt-5">
-  <h2 class="text-4xl font-bold text-green-800 mb-2">Explore Categories</h2>
+<section class="text-center mb-12 animate__animated animate__fadeInDown mt-6">
+  <h2 class="text-4xl font-bold text-green-800 mb-2">
+    Our Categories
+  </h2>
   <p class="text-gray-600 text-base max-w-2xl mx-auto">
-    Browse our wide range of organic farm product categories.
+    Discover premium quality categories from Farm Vibe.
   </p>
 </section>
 
-<!-- Category Grid -->
+
+<!-- Categories Grid -->
 <div
+  *ngIf="!isLoading && !error && categories.length > 0"
   class="max-w-7xl mb-10 mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 animate__animated animate__fadeInUp"
 >
   <div
     *ngFor="let category of categories"
     class="bg-white rounded-xl shadow-md p-4 flex flex-col hover:shadow-lg transition-shadow duration-300"
   >
-    <!-- Category Card -->
-    <a (click)="categoryProduct()" class="block overflow-hidden rounded-lg hover-zoom">
-      <img
-        [src]="category.category_image_url"
-        [alt]="category.name"
-        class="w-full h-48 object-cover"
-      />
+    <!-- Category Image -->
+    <a
+      (click)="goToCategoryWiseProducts(category.id)"
+      class="block overflow-hidden rounded-lg hover-zoom cursor-pointer"
+    >
+<img 
+  [src]="category.category_image_url"
+  class="category-image"
+/>
+
     </a>
 
-    <div class="mt-4 text-center flex-grow flex flex-col">
-      <a
-     (click)="categoryProduct()"
-        class="text-lg font-semibold text-green-800 no-underline hover:text-green-600"
-      >
-        {{ category.name }}
-      </a>
+    <!-- Category Info -->
+    <div class="mt-4 flex flex-col flex-grow">
+<a
+  (click)="goToCategoryWiseProducts(category.id); $event.preventDefault()"
+  class="text-lg font-semibold text-green-800 hover:underline cursor-pointer"
+>
+  {{ category.name }}
+</a>
 
-      <p class="text-gray-600 text-sm mt-1 line-clamp-2">
+
+      <p class="text-gray-700 text-sm mt-1 line-clamp-2">
         {{ category.description }}
       </p>
     </div>
   </div>
+</div>
+
+<!-- Empty State -->
+<div 
+  *ngIf="categories.length === 0 && !isLoading && !error" 
+  class="text-center py-12"
+>
+  <p class="text-gray-600">No categories found.</p>
 </div>

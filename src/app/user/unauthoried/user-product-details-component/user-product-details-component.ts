@@ -27,24 +27,18 @@ export class UserProductDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private productService: ProductDetailService,
     private cdr: ChangeDetectorRef
-  ) {
-    console.log('🏗️ Product Details Component Constructor Called');
-  }
+  ) {}
 
   goToProducts() {
     this.router.navigate(['/farmvibe/products']);
   }
 
   ngOnInit(): void {
-    console.log('🚀 ngOnInit Called for Product Details');
-
-    // Get the product ID from the route parameters
     this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
-      console.log('📌 Route param ID:', id);
 
       if (id) {
-        this.productId = +id; // Convert string to number
+        this.productId = +id;
         this.loadProductDetails(this.productId);
       } else {
         this.error = 'Product ID not found in URL';
@@ -54,7 +48,6 @@ export class UserProductDetailsComponent implements OnInit {
   }
 
   loadProductDetails(id: number): void {
-    console.log('📡 loadProductDetails() called for ID:', id);
     this.isLoading = true;
     this.error = '';
 
@@ -62,7 +55,6 @@ export class UserProductDetailsComponent implements OnInit {
       .getProductById(id)
       .pipe(
         catchError((error) => {
-          console.error('❌ ERROR loading product:', error);
           this.error = `Failed to load product details: ${
             error.status || 'Network Error'
           }`;
@@ -73,15 +65,11 @@ export class UserProductDetailsComponent implements OnInit {
       )
       .subscribe({
         next: (data) => {
-          console.log('📥 Product data received:', data);
-
           if (data) {
-            // Override imageUrl with static image
             this.product = {
               ...data,
               imageUrl: this.staticImageUrl,
             };
-            console.log('✅ Product loaded:', this.product);
           } else {
             this.error = 'Product not found';
           }
@@ -89,19 +77,14 @@ export class UserProductDetailsComponent implements OnInit {
           this.isLoading = false;
           this.cdr.detectChanges();
         },
-        error: (err) => {
-          console.error('❌❌ ERROR in subscribe:', err);
+        error: () => {
           this.error = 'Failed to load product. Please try again.';
           this.isLoading = false;
           this.cdr.detectChanges();
         },
-        complete: () => {
-          console.log('✔️ Product loading completed');
-        },
       });
   }
 
-  // Modal helper methods
   private get modalEl(): HTMLElement | null {
     return document.getElementById('quantityModal');
   }
@@ -123,7 +106,6 @@ export class UserProductDetailsComponent implements OnInit {
   }
 
   openQuantityModel(): void {
-    console.log('Called Open Quantity Model');
     if (this.product && this.product.stock > 0) {
       this.openModal();
     } else {
@@ -134,24 +116,19 @@ export class UserProductDetailsComponent implements OnInit {
   openModal(): void {
     const today = new Date().toISOString().split('T')[0];
 
-    // Set order date text
     if (this.orderDateEl) this.orderDateEl.textContent = today;
 
-    // Set min attribute for delivery date
     if (this.deliveryDateEl) this.deliveryDateEl.setAttribute('min', today);
 
-    // Update max quantity based on product stock
     if (this.quantityInputEl && this.product) {
       this.quantityInputEl.setAttribute('max', String(this.product.stock));
       this.quantityInputEl.value = '1';
     }
 
-    // Update available stock text
     if (this.availableStockEl && this.product) {
       this.availableStockEl.textContent = `Available Stock: ${this.product.stock}`;
     }
 
-    // Show modal
     if (this.modalEl) {
       this.modalEl.classList.remove('hidden');
       this.modalEl.classList.add('flex');
@@ -188,13 +165,6 @@ export class UserProductDetailsComponent implements OnInit {
       return;
     }
 
-    console.log('Proceeding with order:', {
-      productId: this.productId,
-      quantity: quantity,
-      deliveryDate: deliveryDate,
-    });
-
-    // You can pass order data via router state if needed
     this.router.navigate(['/farmvibe/products/address'], {
       state: {
         productId: this.productId,

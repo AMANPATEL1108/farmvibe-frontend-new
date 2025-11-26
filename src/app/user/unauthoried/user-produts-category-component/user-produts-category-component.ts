@@ -1,76 +1,63 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { CategoryService, Category } from './category.service';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Product } from '../user-products-component/product';
+import { UserCategoryProductService } from './category-product.service';
 
 @Component({
-  selector: 'app-user-products-category',
+  selector: 'app-user-produts-category-component',
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './user-produts-category-component.html',
-  styleUrls: ['./user-produts-category-component.css'],
+  styleUrl: './user-produts-category-component.css',
 })
 export class UserProdutsCategoryComponent implements OnInit {
-  categories: Category[] = [];
+  categoryId!: number;
+  categoryName: string = '';
+  products: Product[] = [];
   isLoading: boolean = true;
   error: string | null = null;
-  private baseUrl = 'http://localhost:8080'; // Backend base URL
 
-  constructor(private categoryService: CategoryService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private userCategoryProductService: UserCategoryProductService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.loadCategories();
-  }
-
-  loadCategories(): void {
-    this.isLoading = true;
-    this.error = null;
-
-    this.categoryService.getAllCategories().subscribe({
-      next: (data) => {
-        console.log('Categories received from API:', data);
-        console.log('Number of categories:', data.length);
-        this.categories = data;
-        this.isLoading = false;
-      },
-      error: (error) => {
-        this.error = 'Failed to load categories. Please try again later.';
-        this.isLoading = false;
-        console.error('Error loading categories:', error);
-      },
+    // Get category ID and name from query params
+    this.route.queryParams.subscribe((params) => {
+      this.categoryId = +params['id']; // convert to number
+      this.categoryName = params['name'] || '';
+      if (this.categoryId) {
+        this.loadProducts();
+      }
     });
   }
 
-  /**
-   * Get the full image URL from the backend
-   */
-  getImageUrl(imageUrl: string): string {
-    if (!imageUrl) {
-      return 'assets/images/placeholder.jpg'; // Fallback image
-    }
+  loadProducts(): void {
+    this.isLoading = true;
+    this.error = null;
 
-    // If the URL is already absolute, return as is
-    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
-      return imageUrl;
-    }
-
-    // Remove leading slash if present and construct full URL
-    const cleanPath = imageUrl.startsWith('/')
-      ? imageUrl.substring(1)
-      : imageUrl;
-    return `${this.baseUrl}/${cleanPath}`;
+    this.userCategoryProductService
+      .getProductsByCategory(this.categoryId)
+      .subscribe({
+        next: (data) => {
+          console.log(data);
+          this.products = data;
+          this.isLoading = false;
+        },
+        error: (err) => {
+          this.error = 'Failed to load products. Please try again later.';
+          this.isLoading = false;
+          console.error('Error loading products:', err);
+        },
+      });
   }
 
-  /**
-   * Handle image load errors
-   */
-  onImageError(event: Event): void {
-    const img = event.target as HTMLImageElement;
-    img.src = 'assets/images/placeholder.jpg'; // Use a placeholder image
-    console.warn('Failed to load image, using placeholder');
-  }
-
-  goToProductDetailsPage(): void {
-    // Your existing implementation
+  goToProductDetailsPage(productId: number) {
+    this.router.navigate(['/farmvibe/products/product-details'], {
+      queryParams: { id: productId },
+    });
   }
 }

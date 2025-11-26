@@ -1,76 +1,56 @@
 <!-- Section Heading -->
 <section class="text-center mb-12 animate__animated animate__fadeInDown mt-6">
   <h2 class="text-4xl font-bold text-green-800 mb-2">
-    Our Categories
+    {{ categoryName }} Products
   </h2>
   <p class="text-gray-600 text-base max-w-2xl mx-auto">
-    Discover premium quality categories from Farm Vibe.
+    Discover premium quality items in this category from Farm Vibe.
   </p>
 </section>
 
 <!-- Loading State -->
 <div *ngIf="isLoading" class="text-center py-12">
-  <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-600"></div>
-  <p class="mt-4 text-gray-600">Loading categories...</p>
+  <p class="text-gray-600">Loading products...</p>
 </div>
 
 <!-- Error State -->
-<div *ngIf="error && !isLoading" class="text-center py-12">
-  <p class="text-red-600 mb-4">{{ error }}</p>
-  <button 
-    (click)="loadCategories()"
-    class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
-  >
-    Try Again
-  </button>
+<div *ngIf="error" class="text-center py-12">
+  <p class="text-red-500">{{ error }}</p>
 </div>
 
-<!-- Categories Grid -->
+<!-- Product Grid -->
 <div
-  *ngIf="!isLoading && !error && categories.length > 0"
+  *ngIf="!isLoading && !error && products.length > 0"
   class="max-w-7xl mb-10 mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 animate__animated animate__fadeInUp"
 >
   <div
-    *ngFor="let category of categories"
+    *ngFor="let product of products"
     class="bg-white rounded-xl shadow-md p-4 flex flex-col hover:shadow-lg transition-shadow duration-300"
   >
-    <!-- Category Image -->
-<a
-  (click)="goToProductDetailsPage()"
-  class="block overflow-hidden rounded-lg hover-zoom cursor-pointer"
->
-  <img
-    src="/src/assets/images/vegetables/tomato.jpeg"
-    alt="Vegetables"
-    class="w-full h-48 object-cover"
-  />
+    <!-- Product Image -->
+    <a (click)="goToProductDetailsPage(product.id)" class="block overflow-hidden rounded-lg hover-zoom cursor-pointer">
+      <img [src]="product.imageUrl" [alt]="product.name" class="w-full h-48 object-cover" />
+    </a>
 
-
-</a>
-
-
-    <!-- Category Info -->
+    <!-- Product Info -->
     <div class="mt-4 flex flex-col flex-grow">
-      <a
-        (click)="goToProductDetailsPage()"
-        class="text-lg font-semibold text-green-800 hover:underline cursor-pointer"
-      >
-        {{ category.name }}
+      <a (click)="goToProductDetailsPage(product.id)" class="text-lg font-semibold text-green-800 hover:underline">
+        {{ product.name }}
       </a>
 
-      <p class="text-gray-700 text-sm mt-1 line-clamp-2">
-        {{ category.description }}
-      </p>
+      <p class="text-gray-700 text-sm mt-1 line-clamp-2">{{ product.description }}</p>
 
-    
+      <div class="mt-auto flex items-center justify-between mt-4">
+        <span class="text-xl font-bold text-red-600">₹{{ product.price }} / {{ product.weight }}</span>
+        <span class="text-sm" [ngClass]="product.stock > 0 ? 'text-green-600' : 'text-red-500'">
+          {{ product.stock > 0 ? 'In Stock' : 'Out of Stock' }}
+        </span>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- Empty State -->
-<div 
-  *ngIf="categories.length === 0 && !isLoading && !error" 
-  class="text-center py-12"
->
-  <p class="text-gray-600">No categories found.</p>
+<div *ngIf="!isLoading && !error && products.length === 0" class="text-center py-12">
+  <p class="text-gray-600">No products found in this category.</p>
 </div>
