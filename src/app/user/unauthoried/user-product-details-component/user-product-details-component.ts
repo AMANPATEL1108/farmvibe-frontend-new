@@ -6,7 +6,6 @@ import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { ProductDetailService } from './productdetails.srevice';
 import { Product } from './product';
-import { ProductDataService } from '../ProductDataService';
 
 @Component({
   selector: 'app-user-product-details',
@@ -27,7 +26,6 @@ export class UserProductDetailsComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private productService: ProductDetailService,
-    private productDataService: ProductDataService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -36,12 +34,13 @@ export class UserProductDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.productId = this.productDataService.getProductId();
+    const nav = this.router.getCurrentNavigation();
+    const state = nav?.extras?.state as { id?: number };
+
+    this.productId = state?.id ?? history.state.id;
 
     if (this.productId) {
       this.loadProductDetails(this.productId);
-      // Optional: Clear the ID after use if needed
-      // this.productDataService.clearProductId();
     } else {
       this.error = 'Product ID not found';
       this.isLoading = false;

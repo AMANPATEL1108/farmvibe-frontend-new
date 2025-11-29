@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Product } from '../user-products-component/product';
 import { UserCategoryProductService } from './category-product.service';
-import { ProductDataService } from '../ProductDataService';
 
 @Component({
   selector: 'app-user-produts-category-component',
@@ -21,20 +20,20 @@ export class UserProdutsCategoryComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private productDataService: ProductDataService,
     private userCategoryProductService: UserCategoryProductService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.categoryId = this.productDataService.getProductId();
+    const nav = this.router.getCurrentNavigation();
+    const state = nav?.extras?.state as { id?: number };
+
+    this.categoryId = state?.id ?? history.state.id;
 
     if (this.categoryId) {
       this.loadProducts(this.categoryId);
-      // Optional: Clear the ID after use if needed
-      // this.productDataService.clearProductId();
     } else {
-      this.error = 'Product ID not found';
+      this.error = 'Category ID not found';
       this.isLoading = false;
     }
   }
@@ -49,7 +48,8 @@ export class UserProdutsCategoryComponent implements OnInit {
       .subscribe({
         next: (data) => {
           console.log(data);
-          this.products = data;
+          this.categoryName = data.name; // now works ✔
+          this.products = data.products; // this is what your HTML needs ✔
           this.isLoading = false;
         },
         error: (err) => {
@@ -62,7 +62,9 @@ export class UserProdutsCategoryComponent implements OnInit {
 
   goToProductDetailsPage(productId: number) {
     this.router.navigate(['/farmvibe/products/product-details'], {
-      queryParams: { id: productId },
+      state: { id: productId },
     });
   }
+
+
 }

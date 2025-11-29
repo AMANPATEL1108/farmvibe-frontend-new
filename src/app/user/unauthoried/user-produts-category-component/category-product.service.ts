@@ -12,6 +12,14 @@ export interface Product {
   stock: number;
 }
 
+export interface CategoryResponse {
+  id: number;
+  name: string;
+  description: string;
+  category_image_url: string;
+  products: Product[];
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -21,8 +29,8 @@ export class UserCategoryProductService {
   constructor(private http: HttpClient) {}
 
   // Get products by category ID
-  getProductsByCategory(categoryId: number): Observable<Product[]> {
-    return this.http.get<Product[]>(
+  getProductsByCategory(categoryId: number): Observable<CategoryResponse> {
+    return this.http.get<CategoryResponse>(
       `${this.apiBaseUrl}/get-category-by-id/${categoryId}`
     );
   }
