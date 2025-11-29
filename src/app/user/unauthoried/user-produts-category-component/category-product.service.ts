@@ -16,14 +16,14 @@ export interface Product {
   providedIn: 'root',
 })
 export class UserCategoryProductService {
-  private apiBaseUrl = 'http://localhost:8080/public/api/products';
+  private apiBaseUrl = 'http://localhost:8080/public/api/categories';
 
   constructor(private http: HttpClient) {}
 
   // Get products by category ID
   getProductsByCategory(categoryId: number): Observable<Product[]> {
     return this.http.get<Product[]>(
-      `${this.apiBaseUrl}/category-by-products/${categoryId}`
+      `${this.apiBaseUrl}/get-category-by-id/${categoryId}`
     );
   }
 }

@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { ProductDetailService } from './productdetails.srevice';
 import { Product } from './product';
+import { ProductDataService } from '../ProductDataService';
 
 @Component({
   selector: 'app-user-product-details',
@@ -26,6 +27,7 @@ export class UserProductDetailsComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private productService: ProductDetailService,
+    private productDataService: ProductDataService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -34,17 +36,16 @@ export class UserProductDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
-      const id = params.get('id');
+    this.productId = this.productDataService.getProductId();
 
-      if (id) {
-        this.productId = +id;
-        this.loadProductDetails(this.productId);
-      } else {
-        this.error = 'Product ID not found in URL';
-        this.isLoading = false;
-      }
-    });
+    if (this.productId) {
+      this.loadProductDetails(this.productId);
+      // Optional: Clear the ID after use if needed
+      // this.productDataService.clearProductId();
+    } else {
+      this.error = 'Product ID not found';
+      this.isLoading = false;
+    }
   }
 
   loadProductDetails(id: number): void {

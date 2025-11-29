@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Product } from '../user-products-component/product';
 import { UserCategoryProductService } from './category-product.service';
+import { ProductDataService } from '../ProductDataService';
 
 @Component({
   selector: 'app-user-produts-category-component',
@@ -12,7 +13,7 @@ import { UserCategoryProductService } from './category-product.service';
   styleUrl: './user-produts-category-component.css',
 })
 export class UserProdutsCategoryComponent implements OnInit {
-  categoryId!: number;
+  categoryId: number | null = null;
   categoryName: string = '';
   products: Product[] = [];
   isLoading: boolean = true;
@@ -20,27 +21,31 @@ export class UserProdutsCategoryComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private productDataService: ProductDataService,
     private userCategoryProductService: UserCategoryProductService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    // Get category ID and name from query params
-    this.route.queryParams.subscribe((params) => {
-      this.categoryId = +params['id']; // convert to number
-      this.categoryName = params['name'] || '';
-      if (this.categoryId) {
-        this.loadProducts();
-      }
-    });
+    this.categoryId = this.productDataService.getProductId();
+
+    if (this.categoryId) {
+      this.loadProducts(this.categoryId);
+      // Optional: Clear the ID after use if needed
+      // this.productDataService.clearProductId();
+    } else {
+      this.error = 'Product ID not found';
+      this.isLoading = false;
+    }
   }
 
-  loadProducts(): void {
+  loadProducts(categoryIdis: number): void {
+    console.log('My id is ', categoryIdis);
     this.isLoading = true;
     this.error = null;
 
     this.userCategoryProductService
-      .getProductsByCategory(this.categoryId)
+      .getProductsByCategory(categoryIdis)
       .subscribe({
         next: (data) => {
           console.log(data);

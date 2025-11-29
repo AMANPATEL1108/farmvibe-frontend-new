@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { Category, CategoryService } from './category.service';
+import { ProductDataService } from '../ProductDataService';
 
 @Component({
   selector: 'app-user-category-component',
@@ -18,6 +19,7 @@ export class UserCategoryComponent {
 
   constructor(
     private categoryService: CategoryService,
+    private productDataService: ProductDataService,
     private router: Router
   ) {}
 
@@ -45,9 +47,8 @@ export class UserCategoryComponent {
   }
 
   goToCategoryWiseProducts(id: number) {
+    this.productDataService.setProductId(id);
     console.log(id, name);
-    this.router.navigate(['/farmvibe/category/product-category'], {
-      queryParams: { id },
-    });
+    this.router.navigate(['/farmvibe/category/product-category']);
   }
 }

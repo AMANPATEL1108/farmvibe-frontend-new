@@ -5,6 +5,7 @@ import { ProductService } from './product.service';
 import { Product } from './product';
 import { catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { ProductDataService } from '../ProductDataService';
 
 @Component({
   selector: 'app-user-products-component',
@@ -25,6 +26,7 @@ export class UserProductsComponent implements OnInit {
   constructor(
     private router: Router,
     private productService: ProductService,
+    private productDataService: ProductDataService,
     private cdr: ChangeDetectorRef
   ) {
     console.log('🏗️ Component Constructor Called');
@@ -124,7 +126,8 @@ export class UserProductsComponent implements OnInit {
   }
 
   goToProductDetailsPage(productId: number) {
-    this.router.navigate(['/farmvibe/products/product-details', productId]);
+    this.productDataService.setProductId(productId);
+    this.router.navigate(['/farmvibe/products/product-details']);
   }
 
   // Helper method to track items in ngFor for better performance
