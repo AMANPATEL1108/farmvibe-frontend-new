@@ -1,49 +1,103 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+import {
+  UserAddressDetailService,
+  Address,
+} from '../user-address-detail-component/user-address-detail-service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-user-payment-options-component',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, HttpClientModule],
   templateUrl: './user-payment-options-component.html',
   styleUrl: './user-payment-options-component.css',
 })
 export class UserPaymentOptionsComponent {
-  constructor(private router: Router) {}
-
   selectedMethod: 'online' | 'offline' = 'online';
 
-  product = {
-    name: 'Fresh Apples',
-    price: 120, // per kg
-  };
+  product: any = null;
+  qty: number = 1;
+  orderDate: string = new Date().toISOString().split('T')[0];
+  deliveryDate: string = '';
+  address: Address | null = null;
 
-  qty = 2; // quantity in kg
-  orderDate = '2025-08-24';
-  deliveryDate = '2025-08-26';
+  category: { name: string } = { name: 'N/A' };
+  total: number = 0;
 
-  address = {
-    first_name: 'Aman',
-    last_name: 'Patel',
-    house_number: '12/A',
-    street: 'Om Society',
-    area: 'Satellite',
-    pincode: '380015',
-  };
+  totalPrice: number = 0;
 
-  totalPrice = this.product.price * this.qty;
+  constructor(
+    private router: Router,
+    private addressService: UserAddressDetailService,
+    private toastr: ToastrService
+  ) {
+    const nav = this.router.getCurrentNavigation();
+    const data = nav?.extras?.state;
 
-  // Methods
+    if (data) {
+      this.product = data['product'];
+      this.category = data['category'] || { name: 'N/A' };
+      this.qty = data['quantity'] || 1;
+      this.total = data['total'] || 0;
+      this.totalPrice = this.total;
+      this.deliveryDate = data['deliveryDate'] || '';
+      this.orderDate = new Date().toLocaleString();
+
+      const addressId = data['addressId'];
+      if (addressId) {
+        this.loadAddress(addressId);
+      }
+    }
+  }
+
+  loadAddress(addressId: number) {
+    this.addressService.getAddresses().subscribe({
+      next: (addresses) => {
+        const selected = addresses.find(
+          (addr) => addr.address_id === addressId
+        );
+        if (selected) {
+          this.address = selected;
+        } else {
+          this.toastr.error('Address not found');
+        }
+      },
+      error: (err) => console.error(err),
+    });
+  }
+
   showDetails(method: 'online' | 'offline') {
     this.selectedMethod = method;
   }
 
   proceedOnline() {
-    this.router.navigate(['/farmvibe/products/payment-options/online']);
+    if (!this.address) return;
+    this.router.navigate(['/farmvibe/products/payment-options/online'], {
+      state: {
+        product: this.product,
+        quantity: this.qty,
+        deliveryDate: this.deliveryDate,
+        address: this.address,
+        total: this.totalPrice,
+        category: this.category,
+      },
+    });
   }
 
   proceedCOD() {
-    this.router.navigate(['/farmvibe/products/payment-options/cod']);
+    if (!this.address) return;
+    this.router.navigate(['/farmvibe/products/payment-options/cod'], {
+      state: {
+        product: this.product,
+        quantity: this.qty,
+        deliveryDate: this.deliveryDate,
+        address: this.address,
+        total: this.totalPrice,
+        category: this.category,
+      },
+    });
   }
 }

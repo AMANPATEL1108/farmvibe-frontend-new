@@ -44,11 +44,18 @@ export class UserSigninComponent {
         next: (response) => {
           this.isLoading = false;
 
-          // Store token and update authentication state
+          // Store token
           localStorage.setItem('authToken', response.token);
-          this.headerService.setAuthentication(response.token);
 
-          // Redirect to home page
+          // Store user details separately
+          localStorage.setItem('userId', response.user.userId.toString());
+          localStorage.setItem('username', response.user.username);
+          localStorage.setItem('email', response.user.email);
+
+          // Also optional: store whole user object if needed
+          // localStorage.setItem('currentUser', JSON.stringify(response.user));
+
+          this.headerService.setAuthentication(response.token);
           this.router.navigate(['/farmvibe/home']);
         },
         error: (error) => {
@@ -68,7 +75,6 @@ export class UserSigninComponent {
         },
       });
     } else {
-      // Mark all fields as touched to show validation errors
       Object.keys(this.loginForm.controls).forEach((key) => {
         this.loginForm.get(key)?.markAsTouched();
       });

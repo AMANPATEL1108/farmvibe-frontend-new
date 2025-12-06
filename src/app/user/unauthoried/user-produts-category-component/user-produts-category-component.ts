@@ -39,7 +39,6 @@ export class UserProdutsCategoryComponent implements OnInit {
   }
 
   loadProducts(categoryIdis: number): void {
-    console.log('My id is ', categoryIdis);
     this.isLoading = true;
     this.error = null;
 
@@ -47,7 +46,6 @@ export class UserProdutsCategoryComponent implements OnInit {
       .getProductsByCategory(categoryIdis)
       .subscribe({
         next: (data) => {
-          console.log(data);
           this.categoryName = data.name; // now works ✔
           this.products = data.products; // this is what your HTML needs ✔
           this.isLoading = false;
@@ -55,7 +53,6 @@ export class UserProdutsCategoryComponent implements OnInit {
         error: (err) => {
           this.error = 'Failed to load products. Please try again later.';
           this.isLoading = false;
-          console.error('Error loading products:', err);
         },
       });
   }

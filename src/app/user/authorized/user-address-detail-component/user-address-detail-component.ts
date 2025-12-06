@@ -20,11 +20,15 @@ import { ToastrService } from 'ngx-toastr';
 export class UserAddressDetailComponent implements OnInit {
   addresses: Address[] = [];
   selectedAddressId: number | null = null;
-
   locations: Location[] = [];
   cities: string[] = [];
   areas: string[] = [];
   selectedCity: string = '';
+  navData: any = null;
+  productId: number | null = null;
+  quantity: number | null = null;
+  deliveryDate: any = null;
+  product: any = null;
 
   newAddress: Address = {
     first_name: '',
@@ -45,7 +49,17 @@ export class UserAddressDetailComponent implements OnInit {
     private router: Router,
     private addressService: UserAddressDetailService,
     private toastr: ToastrService
-  ) {}
+  ) {
+    const navigation = this.router.getCurrentNavigation();
+    this.navData = navigation?.extras?.state || null;
+
+    if (this.navData) {
+      this.productId = this.navData.productId;
+      this.quantity = this.navData.quantity;
+      this.deliveryDate = this.navData.deliveryDate;
+      this.product = this.navData.product;
+    }
+  }
 
   ngOnInit(): void {
     this.loadCurrentUser();
@@ -134,23 +148,23 @@ export class UserAddressDetailComponent implements OnInit {
     };
     return defaultAreas[city] || [];
   }
-
   continueWithSaved() {
     if (!this.selectedAddressId) {
       this.toastr.warning('Please select an address');
       return;
     }
 
-    const selectedAddress = this.addresses.find(
-      (addr) => addr.address_id === this.selectedAddressId
-    );
-    if (selectedAddress) {
-      console.log('Continuing with address:', selectedAddress);
-      this.router.navigate(['/farmvibe/products/payment-options']);
-      this.toastr.success('Address selected successfully');
-    } else {
-      this.toastr.error('Selected address not found');
-    }
+    // Pass only addressId and product/order info
+    this.router.navigate(['/farmvibe/products/payment-options'], {
+      state: {
+        addressId: this.selectedAddressId, // <-- always pass ID
+        product: this.product,
+        quantity: this.quantity,
+        deliveryDate: this.deliveryDate,
+        category: this.product?.category || { name: 'N/A' },
+        total: this.product?.price * (this.quantity || 1),
+      },
+    });
   }
 
   saveNewAddress(): void {
@@ -163,21 +177,36 @@ export class UserAddressDetailComponent implements OnInit {
 
     const addressToSave: Address = {
       ...this.newAddress,
-      user_id: this.currentUser?.user_id,
+      user_id: Number(localStorage.getItem('userId')),
     };
 
     this.addressService.createAddress(addressToSave).subscribe({
       next: (response: any) => {
         this.isLoading = false;
-        console.log('Address saved successfully:', response);
+
+        // Use returned address_id from API
+        const newAddressId = response?.address_id;
+        if (!newAddressId) {
+          this.toastr.error('Failed to get saved address ID');
+          return;
+        }
+
         this.toastr.success('Address saved successfully');
 
-        this.resetNewAddressForm();
-        this.loadAddresses(); // Reload addresses to include the new one
+        // Navigate to next page with newly created address_id
+        this.router.navigate(['/farmvibe/products/payment-options'], {
+          state: {
+            addressId: newAddressId,
+            product: this.product,
+            quantity: this.quantity,
+            deliveryDate: this.deliveryDate,
+            category: this.product?.category || { name: 'N/A' },
+            total: this.product?.price * (this.quantity || 1),
+          },
+        });
       },
       error: (error) => {
         this.isLoading = false;
-        console.error('Error saving address:', error);
         this.toastr.error(error.message || 'Failed to save address');
       },
     });

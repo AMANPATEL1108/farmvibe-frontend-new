@@ -92,7 +92,11 @@ export class UserHeaderComponentService {
   logout() {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('authToken');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('username');
+      localStorage.removeItem('email');
     }
+
     this.setAuthState(false);
   }
 

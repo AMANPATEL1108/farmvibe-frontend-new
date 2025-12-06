@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Router, RouterLink, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Category, CategoryService } from './category.service';
 
 @Component({
@@ -31,15 +31,12 @@ export class UserCategoryComponent {
 
     this.categoryService.getAllCategories().subscribe({
       next: (data) => {
-        console.log('Categories received from API:', data);
-        console.log('Number of categories:', data.length);
         this.categories = data;
         this.isLoading = false;
       },
-      error: (error) => {
+      error: () => {
         this.error = 'Failed to load categories. Please try again later.';
         this.isLoading = false;
-        console.error('Error loading categories:', error);
       },
     });
   }
@@ -49,10 +46,4 @@ export class UserCategoryComponent {
       state: { id: id },
     });
   }
-
-  // goToCategoryWiseProducts(id: number) {
-  //   this.productDataService.setProductId(id);
-  //   console.log(id, name);
-  //   this.router.navigate(['/farmvibe/category/product-category']);
-  // }
 }

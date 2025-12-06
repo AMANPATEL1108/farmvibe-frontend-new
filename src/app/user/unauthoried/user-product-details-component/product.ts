@@ -6,4 +6,5 @@ export interface Product {
   price: number;
   weight: string;
   stock: number;
+  benefits: string[];
 }

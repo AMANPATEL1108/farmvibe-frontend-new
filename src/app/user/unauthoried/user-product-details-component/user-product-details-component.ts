@@ -66,9 +66,20 @@ export class UserProductDetailsComponent implements OnInit {
       .subscribe({
         next: (data) => {
           if (data) {
+            let parsedBenefits = data.benefits;
+            if (typeof parsedBenefits === 'string') {
+              try {
+                parsedBenefits = JSON.parse(parsedBenefits);
+              } catch {
+                parsedBenefits = [];
+              }
+            }
+
+            // Update product object
             this.product = {
               ...data,
               imageUrl: this.staticImageUrl,
+              benefits: parsedBenefits,
             };
           } else {
             this.error = 'Product not found';
@@ -77,6 +88,7 @@ export class UserProductDetailsComponent implements OnInit {
           this.isLoading = false;
           this.cdr.detectChanges();
         },
+
         error: () => {
           this.error = 'Failed to load product. Please try again.';
           this.isLoading = false;

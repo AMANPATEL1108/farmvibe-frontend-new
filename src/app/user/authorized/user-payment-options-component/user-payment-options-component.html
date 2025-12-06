@@ -31,10 +31,11 @@
         <li><strong>Price per kg:</strong> ₹{{ product.price }}</li>
         <li><strong>Order Date:</strong> {{ orderDate }}</li>
         <li><strong>Delivery Date:</strong> {{ deliveryDate }}</li>
-        <li><strong>Address:</strong>
-          {{ address.first_name }} {{ address.last_name }}, {{ address.house_number }},
-          {{ address.street }} - {{ address.area }} - {{ address.pincode }}
-        </li>
+     <li *ngIf="address"><strong>Address:</strong>
+  {{ address.house_number }}, {{ address.street }}, {{ address.area }}, {{ address.city }} - {{ address.pincode }}
+</li>
+
+
       </ul>
       <p class="font-bold text-xl text-green-800 mb-8 select-none">
         Total Price: ₹{{ totalPrice }}
@@ -54,10 +55,10 @@
         <li><strong>Price per kg:</strong> ₹{{ product.price }}</li>
         <li><strong>Order Date:</strong> {{ orderDate }}</li>
         <li><strong>Delivery Date:</strong> {{ deliveryDate }}</li>
-        <li><strong>Address:</strong>
-          {{ address.first_name }} {{ address.last_name }}, {{ address.house_number }},
-          {{ address.street }} - {{ address.area }} - {{ address.pincode }}
-        </li>
+       <li *ngIf="address"><strong>Address:</strong>
+  {{ address.house_number }}, {{ address.street }}, {{ address.area }}, {{ address.city }} - {{ address.pincode }}
+</li>
+
       </ul>
       <p class="font-bold text-xl text-yellow-800 mb-8 select-none">
         Total Price: ₹{{ totalPrice }}
