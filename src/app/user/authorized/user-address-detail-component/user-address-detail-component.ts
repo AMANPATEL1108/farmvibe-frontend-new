@@ -157,7 +157,7 @@ export class UserAddressDetailComponent implements OnInit {
     // Pass only addressId and product/order info
     this.router.navigate(['/farmvibe/products/payment-options'], {
       state: {
-        addressId: this.selectedAddressId, // <-- always pass ID
+        addressId: this.selectedAddressId, 
         product: this.product,
         quantity: this.quantity,
         deliveryDate: this.deliveryDate,
